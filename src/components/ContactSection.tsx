@@ -181,12 +181,12 @@ const ContactSection: React.FC<ContactSectionProps> = ({ theme }) => {
                       Phone
                     </h4>
                     <a
-                      href="tel:+201101021996"
+                      href="tel:+201203208888"
                       className={`hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors ${
                         theme === "dark" ? "text-white" : "text-gray-900"
                       }`}
                     >
-                      +20 110 102 1996
+                      +20 120 320 8888
                     </a>
                   </div>
                 </div>

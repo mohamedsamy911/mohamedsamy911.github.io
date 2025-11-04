@@ -53,8 +53,8 @@ export const Navbar: React.FC<NavbarProps> = ({ theme }) => {
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <div className="container mx-auto px-6">
-        <div className="flex justify-between items-center">
+      <div className="container mx-auto">
+        <div className="flex justify-between items-center px-6">
           {/* Logo */}
           <motion.div
             whileHover={{ scale: 1.05 }}
@@ -159,28 +159,57 @@ export const Navbar: React.FC<NavbarProps> = ({ theme }) => {
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3 }}
               className={`md:hidden overflow-hidden ${
-                theme === "dark" ? "bg-gray-900" : "bg-white"
+                theme === "dark"
+                  ? "bg-gradient-to-b from-gray-900 to-gray-800/95"
+                  : "bg-gradient-to-b from-white to-gray-50/95"
+              } backdrop-blur-xl border-t ${
+                theme === "dark" ? "border-gray-700/50" : "border-gray-200/50"
               }`}
             >
-              <div className="pt-4 pb-8 space-y-4">
-                {navItems.map((item) => (
-                  <ScrollLink
+              <div className="py-6 px-4 space-y-2">
+                {navItems.map((item, index) => (
+                  <motion.div
                     key={item.id}
-                    to={item.id}
-                    smooth={true}
-                    duration={500}
-                    offset={-80}
-                    className={`block px-4 py-3 text-lg font-medium rounded-lg transition-colors ${
-                      activeSection === item.id
-                        ? "bg-indigo-600 text-white"
-                        : theme === "dark"
-                        ? "text-gray-300 hover:bg-gray-800"
-                        : "text-gray-700 hover:bg-gray-100"
-                    }`}
-                    onClick={() => setMobileMenuOpen(false)}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.1 }}
                   >
-                    {item.label}
-                  </ScrollLink>
+                    <ScrollLink
+                      to={item.id}
+                      smooth={true}
+                      duration={500}
+                      offset={-80}
+                      className={`block px-6 py-4 text-lg font-semibold rounded-xl transition-all duration-200 ${
+                        activeSection === item.id && theme === "dark"
+                          ? "bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-500/50 transform scale-[1.02]"
+                          : activeSection === item.id && theme === "light"
+                          ? "bg-gradient-to-r from-indigo-400 to-purple-400 text-white shadow-lg shadow-indigo-400/50 transform scale-[1.02]"
+                          : theme === "dark"
+                          ? "text-gray-300 hover:bg-gray-700/50 hover:text-white hover:translate-x-1"
+                          : "text-gray-700 hover:bg-gray-100 hover:text-gray-900 hover:translate-x-1"
+                      }`}
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span>{item.label}</span>
+                        {activeSection === item.id && (
+                          <motion.svg
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            className="w-5 h-5"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                              clipRule="evenodd"
+                            />
+                          </motion.svg>
+                        )}
+                      </div>
+                    </ScrollLink>
+                  </motion.div>
                 ))}
               </div>
             </motion.div>
