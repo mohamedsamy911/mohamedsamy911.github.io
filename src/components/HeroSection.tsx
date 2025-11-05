@@ -58,7 +58,11 @@ const HeroSection: React.FC<HeroSectionProps> = ({ theme }) => {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 flex h-full w-full flex-col-reverse md:flex-row-reverse items-center justify-around gap-8 px-4 text-center md:text-left mt-[5rem]">
+      <div 
+        className="relative z-10 flex h-full w-full flex-col-reverse md:flex-row-reverse items-center justify-around gap-8 px-4 text-center md:text-left mt-[5rem]"
+        itemScope 
+        itemType="https://schema.org/Person"
+      >
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -100,7 +104,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ theme }) => {
               transition={{ type: "spring", stiffness: 400, damping: 10 }}
             >
               Hello, I'm{" "}
-              <span className="text-indigo-600 dark:text-indigo-400">
+              <span className="text-indigo-600 dark:text-indigo-400" itemProp="name">
                 <TrueFocus
                   sentence="Mohamed Samy"
                   manualMode={false}
@@ -120,6 +124,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ theme }) => {
             }`}
             initial={{ opacity: 1 }}
             transition={{ delay: 0.6 }}
+            itemProp="jobTitle"
           >
             <motion.span
               id="typing-text"

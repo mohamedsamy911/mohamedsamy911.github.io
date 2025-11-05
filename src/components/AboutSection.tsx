@@ -29,9 +29,10 @@ const AboutSection: React.FC<AboutSectionProps> = ({ theme }) => {
   const isInView = useInView(cardRef, { amount: 0.3 });
   const [hasAnimated, setHasAnimated] = useState(false);
 
-  useEffect(() => {
-    isInView ? setHasAnimated(true) : setHasAnimated(false);
-  }, [isInView]);
+  useEffect(
+    () => (isInView ? setHasAnimated(true) : setHasAnimated(false)),
+    [isInView]
+  );
 
   const professionalSummary =
     /PROFESSIONAL SUMMARY:([\s\S]*?)TECHNICAL SKILLS:/i
@@ -89,6 +90,7 @@ const AboutSection: React.FC<AboutSectionProps> = ({ theme }) => {
       className={`min-h-screen w-full py-20 px-4 transition-colors duration-300 ${
         theme === "dark" ? "bg-gray-900" : "bg-gray-100"
       }`}
+      aria-label="About Mohamed Samy - Software Engineer Skills and Experience"
     >
       <div className="container mx-auto">
         <motion.div
@@ -114,6 +116,7 @@ const AboutSection: React.FC<AboutSectionProps> = ({ theme }) => {
                 className={`text-lg mb-6 leading-relaxed ${
                   theme === "dark" ? "text-gray-300" : "text-gray-700"
                 }`}
+                itemProp="description"
               >
                 {professionalSummary ||
                   "Results-driven Software Engineer with extensive experience in building scalable, secure web applications."}

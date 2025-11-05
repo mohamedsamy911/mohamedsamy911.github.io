@@ -182,11 +182,16 @@ const ProjectsSection: React.FC<ProjectsSectionProps> = ({ theme }) => {
                     </div>
                   </div>
 
-                  <div className="p-7">
+                  <div
+                    className="p-7"
+                    itemScope
+                    itemType="https://schema.org/SoftwareSourceCode"
+                  >
                     <h3
                       className={`text-xl font-bold mb-3 transition-all duration-300 ${
                         theme === "dark" ? "text-white" : "text-gray-900"
                       }`}
+                      itemProp="name"
                     >
                       {project.title}
                     </h3>
@@ -194,6 +199,7 @@ const ProjectsSection: React.FC<ProjectsSectionProps> = ({ theme }) => {
                       className={`mb-5 text-sm leading-relaxed ${
                         theme === "dark" ? "text-gray-300" : "text-gray-600"
                       }`}
+                      itemProp="description"
                     >
                       {project.description}
                     </p>

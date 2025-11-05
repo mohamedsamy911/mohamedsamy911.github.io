@@ -84,6 +84,8 @@ const ContactSection: React.FC<ContactSectionProps> = ({ theme }) => {
       className={`min-h-screen w-full py-20 px-4 ${
         theme === "dark" ? "bg-gray-900" : "bg-gray-50"
       }`}
+      itemScope
+      itemType="https://schema.org/ContactPage"
     >
       <div className="container mx-auto">
         <motion.div
@@ -108,6 +110,7 @@ const ContactSection: React.FC<ContactSectionProps> = ({ theme }) => {
                 className={`text-2xl font-bold mb-6 ${
                   theme === "dark" ? "text-white" : "text-gray-900"
                 }`}
+                itemProp="name"
               >
                 Contact Information
               </h3>
