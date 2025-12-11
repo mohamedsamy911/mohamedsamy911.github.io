@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import React, { useRef, useState } from "react";
 import emailjs from "@emailjs/browser";
+import { PUBLIC_KEY, SERVICE_ID, TEMPLATE_ID } from "../constants";
 
 interface ContactSectionProps {
   readonly theme: string;
@@ -37,10 +38,6 @@ const ContactSection: React.FC<ContactSectionProps> = ({ theme }) => {
   const [message, setMessage] = useState<string>("");
   const [isSending, setIsSending] = useState<boolean>(false);
   const [sendSuccess, setSendSuccess] = useState<boolean | null>(null);
-
-  const PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || "";
-  const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID || "";
-  const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || "";
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

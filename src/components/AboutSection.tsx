@@ -1,6 +1,6 @@
 import { motion, useInView } from "framer-motion";
 import React, { useEffect, useRef, useState, type JSX } from "react";
-import { RESUME_CONTENT } from "./AIChat";
+import { RESUME_CONTENT } from "../constants";
 import resumePdfPath from "../assets/Resume 22025.pdf";
 import {
   Code,
