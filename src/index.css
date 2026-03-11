@@ -1,1 +1,12 @@
 @import "tailwindcss";
+
+/* Prevent horizontal overflow from animated elements causing mobile viewport recalculation */
+html, body {
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Use dvh for stable mobile viewport height */
+#root > div {
+  min-height: 100dvh;
+}
