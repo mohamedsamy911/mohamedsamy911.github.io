@@ -6,6 +6,7 @@ import ContactSection from "./components/ContactSection";
 import ProjectsSection from "./components/ProjectsSection";
 import { ThemeProvider, useTheme } from "./context/ThemeContext";
 import AIChat from "./components/AIChat";
+import Footer from "./components/Footer";
 import { useEffect } from "react";
 
 function App() {
@@ -27,30 +28,16 @@ function PortfolioContent() {
         themeColorMeta.setAttribute("content", "#E6EDFF");
       }
     }
-  }, [theme]); // Rerun this effect whenever the theme state changes
+  }, [theme]);
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-300">
-      <div className={`min-h-screen`}>
-        <div className="dark:bg-gray-900 dark:text-white">
-          <Navbar theme={theme} />
-          <HeroSection theme={theme} />
-          <ProjectsSection theme={theme} />
-          <AboutSection theme={theme} />
-          <ContactSection theme={theme} />
-          <AIChat theme={theme} />
-          <footer
-            className={`py-8 text-center ${
-              theme === "dark"
-                ? "bg-gray-800 text-gray-400"
-                : "bg-gray-100 text-gray-600"
-            }`}
-          >
-            <p>
-              © {new Date().getFullYear()} Mohamed Samy. All rights reserved.
-            </p>
-          </footer>
-        </div>
-      </div>
+    <div className="min-h-screen bg-white dark:bg-gray-900 dark:text-white transition-colors duration-300">
+      <Navbar />
+      <HeroSection />
+      <ProjectsSection />
+      <AboutSection />
+      <ContactSection />
+      <AIChat />
+      <Footer />
     </div>
   );
 }

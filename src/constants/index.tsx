@@ -25,6 +25,8 @@ export const projects = [
     title: "Allocation Management App",
     description:
       "A full-stack allocation system with a sleek dashboard to manage resources and projects efficiently.",
+    category: "Full Stack",
+    github: "https://github.com/mohamedsamy911",
     tags: [
       { label: "React", icon: <Code className="w-3.5 h-3.5" /> },
       { label: "TypeScript", icon: <Code2 className="w-3.5 h-3.5" /> },
@@ -39,6 +41,8 @@ export const projects = [
     title: "E-commerce Platform",
     description:
       "Full-stack e-commerce platform with secure payment integration and admin dashboard.",
+    category: "Full Stack",
+    github: "https://github.com/mohamedsamy911",
     tags: [
       { label: "Node.js", icon: <Code className="w-3.5 h-3.5" /> },
       { label: "Next.js", icon: <Code2 className="w-3.5 h-3.5" /> },
@@ -50,9 +54,11 @@ export const projects = [
     pic: ecommerce,
   },
   {
-    title: "Hospital Management System Backend",
+    title: "Hospital Management System",
     description:
-      "Backend system for hospital management with real-time support.",
+      "Complete backend system for hospital management with real-time WebSocket support, Redis caching, and role-based authentication.",
+    category: "Backend",
+    github: "https://github.com/mohamedsamy911",
     tags: [
       { label: "Node.js", icon: <Code className="w-3.5 h-3.5" /> },
       { label: "NestJS", icon: <Cable className="w-3.5 h-3.5" /> },

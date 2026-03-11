@@ -6,10 +6,9 @@ import iconUrl from "../assets/iconpattern.png";
 import ProfileCard from "./ProfileCard";
 import TextType from "./TextType";
 import TrueFocus from "./TrueFocus";
-interface HeroSectionProps {
-  readonly theme: string;
-}
-const HeroSection: React.FC<HeroSectionProps> = ({ theme }) => {
+import { useTheme } from "../context/ThemeContext";
+const HeroSection: React.FC = () => {
+  const { theme } = useTheme();
   const [hovered, setHovered] = useState(false);
   const subtitles = useRef([
     "JavaScript Developer",
@@ -58,9 +57,9 @@ const HeroSection: React.FC<HeroSectionProps> = ({ theme }) => {
       </div>
 
       {/* Content */}
-      <div 
+      <div
         className="relative z-10 flex h-full w-full flex-col-reverse md:flex-row-reverse items-center justify-around gap-8 px-4 text-center md:text-left mt-[5rem]"
-        itemScope 
+        itemScope
         itemType="https://schema.org/Person"
       >
         <motion.div
@@ -104,7 +103,10 @@ const HeroSection: React.FC<HeroSectionProps> = ({ theme }) => {
               transition={{ type: "spring", stiffness: 400, damping: 10 }}
             >
               Hello, I'm{" "}
-              <span className="text-indigo-600 dark:text-indigo-400" itemProp="name">
+              <span
+                className="text-indigo-600 dark:text-indigo-400"
+                itemProp="name"
+              >
                 <TrueFocus
                   sentence="Mohamed Samy"
                   manualMode={false}
@@ -217,7 +219,13 @@ const HeroSection: React.FC<HeroSectionProps> = ({ theme }) => {
         transition={{ delay: 1.5 }}
         className="translate-x-1/2 my-3 z-10"
       >
-        <ScrollLink aria-label="Scroll to About Section" to="about" href="#about" smooth={true} duration={500}>
+        <ScrollLink
+          aria-label="Scroll to About Section"
+          to="about"
+          href="#about"
+          smooth={true}
+          duration={500}
+        >
           <div
             className={`flex h-10 w-6 items-start justify-center rounded-full border-2 p-1 ${
               theme === "dark" ? "border-white/50" : "border-gray-700/50"

@@ -9,20 +9,15 @@ import {
   Send,
   User,
   X,
+  Trash2,
+  Sparkles,
+  Loader2,
 } from "lucide-react";
 import React, { useState, useEffect, useRef } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { API_KEY, RESUME_CONTENT } from "../constants";
-
-interface Message {
-  text: string;
-  sender: "user" | "gemini";
-}
-
-interface AIChatProps {
-  theme: string;
-}
+import { useTheme } from "../context/ThemeContext";
 
 interface Message {
   text: string;
@@ -33,17 +28,19 @@ const ai = new GoogleGenAI({
   apiKey: API_KEY,
 });
 
-const AIChat: React.FC<AIChatProps> = ({ theme }) => {
+const AIChat: React.FC = () => {
+  const { theme } = useTheme();
   const [messages, setMessages] = useState<Message[]>([]);
-  const [input, setInput] = useState<string>("");
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
-  const [isSummarizing, setIsSummarizing] = useState<boolean>(false);
-  const [isGeneratingQuestions, setIsGeneratingQuestions] =
-    useState<boolean>(false);
-  const [isFeaturesCollapsed, setIsFeaturesCollapsed] =
-    useState<boolean>(false);
+  const [input, setInput] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isSummarizing, setIsSummarizing] = useState(false);
+  const [isGeneratingQuestions, setIsGeneratingQuestions] = useState(false);
+  const [isFeaturesCollapsed, setIsFeaturesCollapsed] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const isDark = theme === "dark";
+  const isBusy = isLoading || isSummarizing || isGeneratingQuestions;
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -53,8 +50,16 @@ const AIChat: React.FC<AIChatProps> = ({ theme }) => {
     scrollToBottom();
   }, [messages]);
 
-  const callGeminiAPI = async (prompt: string): Promise<string> => {
-    let chatHistory = [];
+  /* ─── API ─────────────────────────────────────────────────── */
+
+  const callGeminiAPI = async (
+    prompt: string,
+    currentMessages: Message[]
+  ): Promise<string> => {
+    const chatHistory = currentMessages.map((msg) => ({
+      role: msg.sender === "user" ? "user" : "model",
+      parts: [{ text: msg.text }],
+    }));
     chatHistory.push({ role: "user", parts: [{ text: prompt }] });
 
     const response = await ai.models.generateContent({
@@ -63,7 +68,6 @@ const AIChat: React.FC<AIChatProps> = ({ theme }) => {
     });
 
     const result = response;
-
     if (
       result.candidates &&
       result.candidates.length > 0 &&
@@ -71,11 +75,10 @@ const AIChat: React.FC<AIChatProps> = ({ theme }) => {
       result.candidates[0].content.parts &&
       result.candidates[0].content.parts.length > 0
     ) {
-      let responseText = result.candidates[0].content.parts[0].text;
+      const responseText = result.candidates[0].content.parts[0].text;
       const cleanedText = responseText
         ?.replace(/^```markdown\n/, "")
         ?.replace(/\n```$/, "");
-
       return cleanedText ? cleanedText : "";
     } else {
       console.error("Gemini API response structure unexpected:", result);
@@ -83,12 +86,14 @@ const AIChat: React.FC<AIChatProps> = ({ theme }) => {
     }
   };
 
+  /* ─── Handlers ────────────────────────────────────────────── */
+
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (input.trim() === "") return;
 
     const userMessage: Message = { text: input, sender: "user" };
-    setMessages((prevMessages) => [...prevMessages, userMessage]);
+    setMessages((prev) => [...prev, userMessage]);
     setInput("");
     setIsLoading(true);
 
@@ -101,19 +106,17 @@ const AIChat: React.FC<AIChatProps> = ({ theme }) => {
 
       User's question: ${input}`;
 
-      const geminiResponseText = await callGeminiAPI(prompt);
-      const geminiMessage: Message = {
-        text: geminiResponseText,
-        sender: "gemini",
-      };
-      setMessages((prevMessages) => [...prevMessages, geminiMessage]);
+      const text = await callGeminiAPI(prompt, messages);
+      setMessages((prev) => [...prev, { text, sender: "gemini" }]);
     } catch (error) {
       console.error("Error calling Gemini API:", error);
-      const errorMessage: Message = {
-        text: "There was an error connecting to Gemini. Please try again later.",
-        sender: "gemini",
-      };
-      setMessages((prevMessages) => [...prevMessages, errorMessage]);
+      setMessages((prev) => [
+        ...prev,
+        {
+          text: "There was an error connecting to Gemini. Please try again later.",
+          sender: "gemini",
+        },
+      ]);
     } finally {
       setIsLoading(false);
     }
@@ -121,11 +124,10 @@ const AIChat: React.FC<AIChatProps> = ({ theme }) => {
 
   const handleSummarizeResume = async () => {
     setIsSummarizing(true);
-    const userMessage: Message = {
-      text: "Summarize my resume.",
-      sender: "user",
-    };
-    setMessages((prevMessages) => [...prevMessages, userMessage]);
+    setMessages((prev) => [
+      ...prev,
+      { text: "Summarize my resume.", sender: "user" },
+    ]);
 
     try {
       const prompt = `Respond in the same language as the user's question, or if a specific language is mentioned, use that language.
@@ -134,19 +136,16 @@ const AIChat: React.FC<AIChatProps> = ({ theme }) => {
       Resume:
       ${RESUME_CONTENT}`;
 
-      const geminiResponseText = await callGeminiAPI(prompt);
-      const geminiMessage: Message = {
-        text: geminiResponseText,
-        sender: "gemini",
-      };
-      setMessages((prevMessages) => [...prevMessages, geminiMessage]);
-    } catch (error) {
-      console.error("Error summarizing resume:", error);
-      const errorMessage: Message = {
-        text: "Sorry, I couldn't summarize the resume. Please try again.",
-        sender: "gemini",
-      };
-      setMessages((prevMessages) => [...prevMessages, errorMessage]);
+      const text = await callGeminiAPI(prompt, messages);
+      setMessages((prev) => [...prev, { text, sender: "gemini" }]);
+    } catch {
+      setMessages((prev) => [
+        ...prev,
+        {
+          text: "Sorry, I couldn't summarize the resume. Please try again.",
+          sender: "gemini",
+        },
+      ]);
     } finally {
       setIsSummarizing(false);
     }
@@ -154,11 +153,13 @@ const AIChat: React.FC<AIChatProps> = ({ theme }) => {
 
   const handleGenerateInterviewQuestions = async () => {
     setIsGeneratingQuestions(true);
-    const userMessage: Message = {
-      text: "Generate interview questions based on my resume.",
-      sender: "user",
-    };
-    setMessages((prevMessages) => [...prevMessages, userMessage]);
+    setMessages((prev) => [
+      ...prev,
+      {
+        text: "Generate interview questions based on my resume.",
+        sender: "user",
+      },
+    ]);
 
     try {
       const prompt = `Respond in the same language as the user's question, or if a specific language is mentioned, use that language.
@@ -167,270 +168,431 @@ const AIChat: React.FC<AIChatProps> = ({ theme }) => {
       Resume:
       ${RESUME_CONTENT}`;
 
-      const geminiResponseText = await callGeminiAPI(prompt);
-      const geminiMessage: Message = {
-        text: geminiResponseText,
-        sender: "gemini",
-      };
-      setMessages((prevMessages) => [...prevMessages, geminiMessage]);
-    } catch (error) {
-      console.error("Error generating interview questions:", error);
-      const errorMessage: Message = {
-        text: "Sorry, I couldn't generate interview questions. Please try again.",
-        sender: "gemini",
-      };
-      setMessages((prevMessages) => [...prevMessages, errorMessage]);
+      const text = await callGeminiAPI(prompt, messages);
+      setMessages((prev) => [...prev, { text, sender: "gemini" }]);
+    } catch {
+      setMessages((prev) => [
+        ...prev,
+        {
+          text: "Sorry, I couldn't generate interview questions. Please try again.",
+          sender: "gemini",
+        },
+      ]);
     } finally {
       setIsGeneratingQuestions(false);
     }
   };
 
+  const handleClearChat = () => {
+    setMessages([]);
+  };
+
+  /* ─── Quick Action Button ─────────────────────────────────── */
+
+  const QuickAction: React.FC<{
+    onClick: () => void;
+    disabled: boolean;
+    icon: React.ReactNode;
+    label: string;
+    color: "green" | "purple";
+  }> = ({ onClick, disabled, icon, label, color }) => {
+    const colorClasses = {
+      green: isDark
+        ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20 hover:bg-emerald-500/20"
+        : "bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100",
+      purple: isDark
+        ? "bg-purple-500/10 text-purple-400 border-purple-500/20 hover:bg-purple-500/20"
+        : "bg-purple-50 text-purple-700 border-purple-200 hover:bg-purple-100",
+    };
+
+    return (
+      <button
+        onClick={onClick}
+        disabled={disabled}
+        className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium border transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer ${colorClasses[color]}`}
+      >
+        {icon}
+        {label}
+      </button>
+    );
+  };
+
+  /* ─── Render ──────────────────────────────────────────────── */
+
   return (
     <>
       {/* Floating Chat Button */}
-      <button
-        onClick={() => setIsChatOpen(!isChatOpen)}
-        className={`fixed bottom-4 right-4 text-white rounded-full p-4 shadow-lg focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-300 z-50 transform hover:scale-105 cursor-pointer
-          ${
-            theme === "dark"
-              ? "bg-indigo-800 hover:bg-indigo-700"
-              : "bg-indigo-600 hover:bg-indigo-500"
-          }
-          `}
-        aria-label="Open chat"
-      >
-        <MessageSquare className="h-8 w-8" />
-      </button>
+      <AnimatePresence>
+        {!isChatOpen && (
+          <motion.button
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0, opacity: 0 }}
+            transition={{ type: "spring", stiffness: 400, damping: 25 }}
+            onClick={() => setIsChatOpen(true)}
+            className={`fixed bottom-5 right-5 rounded-full p-4 shadow-xl z-50 cursor-pointer transition-all duration-200 hover:scale-110 active:scale-95 ${
+              isDark
+                ? "bg-indigo-600 text-white shadow-indigo-500/30 hover:shadow-indigo-500/50"
+                : "bg-indigo-600 text-white shadow-indigo-400/40 hover:shadow-indigo-400/60"
+            }`}
+            aria-label="Open chat"
+          >
+            <MessageSquare className="w-6 h-6" />
+            {/* Notification Dot */}
+            <span className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-white dark:border-gray-900" />
+          </motion.button>
+        )}
+      </AnimatePresence>
 
-      {/* Chat Component */}
+      {/* Chat Window */}
       <AnimatePresence>
         {isChatOpen && (
           <motion.div
-            initial={{ opacity: 0, y: 600, x: 0 }}
-            animate={{ opacity: 1, y: 0, x: 0 }}
-            exit={{ y: 600, x: 0 }}
-            transition={{ duration: 0.3, ease: "easeOut" }}
-            className={`fixed bottom-0 left-0 w-full h-[75vh] sm:bottom-4 sm:left-4 sm:w-96 sm:h-[70vh] rounded-lg shadow-2xl flex flex-col overflow-hidden z-50 transition-all duration-300 ease-in-out
-              ${theme === "dark" ? "bg-gray-900" : "bg-white"}
-              `}
-          >
-            {/* Header */}
-            <div
-              className={`bg-gradient-to-r p-4 rounded-t-lg shadow-md flex justify-between items-center
+            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.95 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+            className={`fixed z-50 flex flex-col overflow-hidden
+              /* Mobile: full screen */
+              inset-0
+              /* Small screens: anchored bottom-right */
+              sm:inset-auto sm:bottom-5 sm:right-5 sm:w-[400px] sm:h-[min(75vh,640px)] sm:rounded-2xl
+              /* Medium+ screens: slightly larger */
+              md:w-[420px] md:h-[min(80vh,700px)]
               ${
-                theme === "dark"
-                  ? "from-indigo-800 to-indigo-700 text-amber-50"
-                  : "from-indigo-600 to-indigo-500 text-white"
+                isDark
+                  ? "bg-gray-900 sm:border sm:border-gray-700/60 sm:shadow-2xl sm:shadow-black/40"
+                  : "bg-white sm:border sm:border-gray-200 sm:shadow-2xl sm:shadow-gray-300/50"
               }
-              `}
+            `}
+          >
+            {/* ── Header ──────────────────────────────────── */}
+            <div
+              className={`shrink-0 px-4 py-3 flex items-center justify-between gap-3 border-b ${
+                isDark
+                  ? "bg-gray-900 border-gray-800"
+                  : "bg-white border-gray-100"
+              }`}
             >
-              <h1 className="text-xl font-bold">Chat with Samys' Resume</h1>
-              <div className="flex items-center space-x-2">
-                {/* Collapse/Expand Features Button */}
+              <div className="flex items-center gap-3 min-w-0">
+                <div
+                  className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${
+                    isDark
+                      ? "bg-indigo-500/10 text-indigo-400"
+                      : "bg-indigo-100 text-indigo-600"
+                  }`}
+                >
+                  <Bot className="w-5 h-5" />
+                </div>
+                <div className="min-w-0">
+                  <h2
+                    className={`text-sm font-bold truncate ${
+                      isDark ? "text-white" : "text-gray-900"
+                    }`}
+                  >
+                    Chat with Samy's Resume
+                  </h2>
+                  <p
+                    className={`text-xs ${
+                      isDark ? "text-gray-500" : "text-gray-400"
+                    }`}
+                  >
+                    Powered by Gemini AI
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-1 shrink-0">
+                {messages.length > 0 && (
+                  <button
+                    onClick={handleClearChat}
+                    className={`p-2 rounded-lg transition-colors cursor-pointer ${
+                      isDark
+                        ? "text-gray-500 hover:text-gray-300 hover:bg-gray-800"
+                        : "text-gray-400 hover:text-gray-600 hover:bg-gray-100"
+                    }`}
+                    aria-label="Clear chat"
+                    title="Clear chat"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                )}
                 <button
-                  onClick={() => setIsFeaturesCollapsed(!isFeaturesCollapsed)}
-                  className="text-white hover:text-gray-300 focus:outline-none focus:ring-2 focus:ring-white rounded-full p-1"
+                  onClick={() =>
+                    setIsFeaturesCollapsed(!isFeaturesCollapsed)
+                  }
+                  className={`p-2 rounded-lg transition-colors cursor-pointer ${
+                    isDark
+                      ? "text-gray-500 hover:text-gray-300 hover:bg-gray-800"
+                      : "text-gray-400 hover:text-gray-600 hover:bg-gray-100"
+                  }`}
                   aria-label={
                     isFeaturesCollapsed
-                      ? "Expand features"
-                      : "Collapse features"
+                      ? "Show quick actions"
+                      : "Hide quick actions"
                   }
                 >
                   <ChevronDown
-                    className={`h-6 w-6 transition-transform duration-300 cursor-pointer ${
+                    className={`w-4 h-4 transition-transform duration-300 ${
                       isFeaturesCollapsed ? "rotate-180" : ""
                     }`}
                   />
                 </button>
-                {/* Close Chat Button */}
                 <button
                   onClick={() => setIsChatOpen(false)}
-                  className="text-white hover:text-gray-300 cursor-pointer focus:outline-none focus:ring-2 focus:ring-white rounded-full p-1"
+                  className={`p-2 rounded-lg transition-colors cursor-pointer ${
+                    isDark
+                      ? "text-gray-500 hover:text-gray-300 hover:bg-gray-800"
+                      : "text-gray-400 hover:text-gray-600 hover:bg-gray-100"
+                  }`}
                   aria-label="Close chat"
                 >
-                  <X className="h-6 w-6" />
+                  <X className="w-4 h-4" />
                 </button>
               </div>
             </div>
 
-            {/* Feature Buttons */}
+            {/* ── Quick Actions ────────────────────────────── */}
             <div
-              className={`border-b flex flex-wrap gap-2 justify-center transition-all duration-300
-                ${
-                  isFeaturesCollapsed
-                    ? "max-h-0 overflow-hidden p-0 border-b-0"
-                    : "max-h-48 p-3"
-                }
-                ${
-                  theme === "dark"
-                    ? "bg-gray-800 text-gray-300 border-gray-700"
-                    : "bg-white text-gray-800 border-gray-200"
-                }
-                `}
+              className={`shrink-0 overflow-hidden transition-all duration-300 ${
+                isFeaturesCollapsed
+                  ? "max-h-0 border-b-0"
+                  : "max-h-24 border-b"
+              } ${
+                isDark ? "border-gray-800" : "border-gray-100"
+              }`}
             >
-              <button
-                onClick={handleSummarizeResume}
-                className={`text-white px-4 py-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 transition duration-200 text-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center
-                  ${
-                    theme === "dark"
-                      ? "bg-green-600 hover:bg-green-500 focus:ring-green-500"
-                      : "bg-green-500 hover:bg-green-400 focus:ring-green-300"
-                  }
-                  `}
-                disabled={isSummarizing || isLoading || isGeneratingQuestions}
-              >
-                <FileText className="mr-2" size={16} />✨ Summarize Resume
-              </button>
-              <button
-                onClick={handleGenerateInterviewQuestions}
-                className={`text-white px-4 py-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 transition duration-200 text-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center
-                  ${
-                    theme === "dark"
-                      ? "bg-purple-600 hover:bg-purple-500 focus:ring-purple-500"
-                      : "bg-purple-500 hover:bg-purple-400 focus:ring-purple-300"
-                  }
-                  `}
-                disabled={isGeneratingQuestions || isLoading || isSummarizing}
-              >
-                <HelpCircle className="mr-2" size={16} />✨ Generate Interview
-                Questions
-              </button>
+              <div className="flex gap-2 px-4 py-2.5 overflow-x-auto">
+                <QuickAction
+                  onClick={handleSummarizeResume}
+                  disabled={isBusy}
+                  icon={<FileText className="w-3.5 h-3.5" />}
+                  label="Summarize"
+                  color="green"
+                />
+                <QuickAction
+                  onClick={handleGenerateInterviewQuestions}
+                  disabled={isBusy}
+                  icon={<HelpCircle className="w-3.5 h-3.5" />}
+                  label="Interview Q&A"
+                  color="purple"
+                />
+              </div>
             </div>
 
-            {/* Chat Messages Area */}
+            {/* ── Messages ─────────────────────────────────── */}
+            <style>{`
+              .chat-scrollbar::-webkit-scrollbar { width: 5px; }
+              .chat-scrollbar::-webkit-scrollbar-track { background: transparent; }
+              .chat-scrollbar::-webkit-scrollbar-thumb { background: ${isDark ? "rgba(99,102,241,0.25)" : "rgba(99,102,241,0.2)"}; border-radius: 9999px; }
+              .chat-scrollbar::-webkit-scrollbar-thumb:hover { background: ${isDark ? "rgba(99,102,241,0.45)" : "rgba(99,102,241,0.4)"}; }
+              .chat-scrollbar { scrollbar-width: thin; scrollbar-color: ${isDark ? "rgba(99,102,241,0.25) transparent" : "rgba(99,102,241,0.2) transparent"}; }
+            `}</style>
             <div
-              className={`flex-1 p-4 overflow-y-auto space-y-4 overscroll-y-contain
-              ${theme === "dark" ? "text-gray-300" : "text-gray-800"}
-              `}
+              className={`flex-1 overflow-y-auto overscroll-y-contain px-4 py-4 space-y-3 chat-scrollbar ${
+                isDark ? "text-gray-300" : "text-gray-800"
+              }`}
             >
+              {/* Empty State */}
               {messages.length === 0 && (
-                <div className="text-center mt-10">
-                  <p>Ask me anything about my resume!</p>
-                  <p className="text-sm mt-2">
-                    e.g., "How many years of experience do you have?" or "Tell
-                    me about your e-commerce project."
+                <div className="flex flex-col items-center justify-center h-full text-center px-4">
+                  <div
+                    className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-5 ${
+                      isDark
+                        ? "bg-indigo-500/10 text-indigo-400"
+                        : "bg-indigo-100 text-indigo-600"
+                    }`}
+                  >
+                    <Sparkles className="w-8 h-8" />
+                  </div>
+                  <h3
+                    className={`text-lg font-bold mb-2 ${
+                      isDark ? "text-white" : "text-gray-900"
+                    }`}
+                  >
+                    Ask me anything!
+                  </h3>
+                  <p
+                    className={`text-sm mb-6 max-w-[260px] ${
+                      isDark ? "text-gray-500" : "text-gray-400"
+                    }`}
+                  >
+                    I can answer questions about Mohamed's experience, skills,
+                    and projects.
                   </p>
+                  {/* Suggestion Chips */}
+                  <div className="flex flex-wrap justify-center gap-2">
+                    {[
+                      "Tell me about your experience",
+                      "What tech stack do you use?",
+                      "Describe a major project",
+                    ].map((suggestion) => (
+                      <button
+                        key={suggestion}
+                        onClick={() => {
+                          setInput(suggestion);
+                        }}
+                        className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all duration-200 cursor-pointer hover:-translate-y-0.5 ${
+                          isDark
+                            ? "bg-gray-800/60 border-gray-700 text-gray-400 hover:text-indigo-400 hover:border-indigo-500/30"
+                            : "bg-gray-50 border-gray-200 text-gray-500 hover:text-indigo-600 hover:border-indigo-300"
+                        }`}
+                      >
+                        {suggestion}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               )}
+
+              {/* Message Bubbles */}
               {messages.map((msg, index) => (
-                <div
+                <motion.div
                   key={index}
-                  className={`flex items-end ${
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className={`flex items-end gap-2 ${
                     msg.sender === "user" ? "justify-end" : "justify-start"
                   }`}
                 >
                   {msg.sender !== "user" && (
-                    <Bot
-                      className={`mr-2 flex-shrink-0 ${
-                        theme === "dark" ? "text-indigo-400" : "text-indigo-600"
+                    <div
+                      className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 mb-0.5 ${
+                        isDark
+                          ? "bg-indigo-500/10 text-indigo-400"
+                          : "bg-indigo-100 text-indigo-600"
                       }`}
-                      size={24}
-                    />
+                    >
+                      <Bot className="w-4 h-4" />
+                    </div>
                   )}
                   <div
-                    className={`max-w-[75%] p-3 rounded-2xl shadow-md ${
+                    className={`max-w-[80%] px-3.5 py-2.5 text-sm leading-relaxed ${
                       msg.sender === "user"
-                        ? `${
-                            theme === "dark"
-                              ? "bg-indigo-600 text-white rounded-br-none"
-                              : "bg-indigo-200 text-gray-800 rounded-bl-none"
+                        ? `rounded-2xl rounded-br-md ${
+                            isDark
+                              ? "bg-indigo-600 text-white"
+                              : "bg-indigo-600 text-white"
                           }`
-                        : `${
-                            theme === "dark"
-                              ? "bg-gray-800 text-gray-300 rounded-bl-none"
-                              : "bg-gray-200 text-gray-800 rounded-br-none"
+                        : `rounded-2xl rounded-bl-md ${
+                            isDark
+                              ? "bg-gray-800 text-gray-300 border border-gray-700/50"
+                              : "bg-gray-100 text-gray-800"
                           }`
                     }`}
                   >
                     <bdi>
                       {msg.sender === "gemini" ? (
-                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                          {msg.text}
-                        </ReactMarkdown>
+                        <div className="prose prose-sm dark:prose-invert max-w-none [&>*:first-child]:mt-0 [&>*:last-child]:mb-0 [&_p]:my-1.5 [&_ul]:my-1.5 [&_ol]:my-1.5 [&_li]:my-0.5 [&_h1]:text-base [&_h2]:text-sm [&_h3]:text-sm [&_code]:text-xs [&_pre]:text-xs">
+                          <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                            {msg.text}
+                          </ReactMarkdown>
+                        </div>
                       ) : (
                         msg.text
                       )}
                     </bdi>
                   </div>
                   {msg.sender === "user" && (
-                    <User
-                      className={`ml-2 flex-shrink-0 ${
-                        theme === "dark" ? "text-indigo-400" : "text-indigo-600"
+                    <div
+                      className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 mb-0.5 ${
+                        isDark
+                          ? "bg-indigo-500/10 text-indigo-400"
+                          : "bg-indigo-100 text-indigo-600"
                       }`}
-                      size={24}
-                    />
+                    >
+                      <User className="w-4 h-4" />
+                    </div>
                   )}
-                </div>
+                </motion.div>
               ))}
-              {(isLoading || isSummarizing || isGeneratingQuestions) && (
-                <div className="flex justify-start items-end">
-                  <Bot
-                    className={`mr-2 flex-shrink-0 ${
-                      theme === "dark" ? "text-indigo-400" : "text-indigo-600"
-                    }`}
-                    size={24}
-                  />
+
+              {/* Typing Indicator */}
+              {isBusy && (
+                <motion.div
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="flex items-end gap-2 justify-start"
+                >
                   <div
-                    className={`max-w-[75%] p-3 rounded-2xl shadow-md ${
-                      theme === "dark"
-                        ? "bg-gray-800 text-gray-300 rounded-bl-none"
-                        : "bg-gray-200 text-gray-800 rounded-br-none"
+                    className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 mb-0.5 ${
+                      isDark
+                        ? "bg-indigo-500/10 text-indigo-400"
+                        : "bg-indigo-100 text-indigo-600"
                     }`}
                   >
-                    <div className="flex items-center">
-                      <span className="animate-bounce text-xl mr-1">.</span>
-                      <span className="animate-bounce text-xl mr-1 delay-75">
-                        .
-                      </span>
-                      <span className="animate-bounce text-xl delay-150">
-                        .
-                      </span>
+                    <Bot className="w-4 h-4" />
+                  </div>
+                  <div
+                    className={`px-4 py-3 rounded-2xl rounded-bl-md ${
+                      isDark
+                        ? "bg-gray-800 border border-gray-700/50"
+                        : "bg-gray-100"
+                    }`}
+                  >
+                    <div className="flex items-center gap-1">
+                      <span
+                        className={`w-2 h-2 rounded-full animate-bounce ${
+                          isDark ? "bg-indigo-400" : "bg-indigo-500"
+                        }`}
+                        style={{ animationDelay: "0ms" }}
+                      />
+                      <span
+                        className={`w-2 h-2 rounded-full animate-bounce ${
+                          isDark ? "bg-indigo-400" : "bg-indigo-500"
+                        }`}
+                        style={{ animationDelay: "150ms" }}
+                      />
+                      <span
+                        className={`w-2 h-2 rounded-full animate-bounce ${
+                          isDark ? "bg-indigo-400" : "bg-indigo-500"
+                        }`}
+                        style={{ animationDelay: "300ms" }}
+                      />
                     </div>
                   </div>
-                </div>
+                </motion.div>
               )}
               <div ref={messagesEndRef} />
             </div>
 
-            {/* Message Input */}
+            {/* ── Input ────────────────────────────────────── */}
             <form
               onSubmit={handleSendMessage}
-              className={`p-4 border-t rounded-b-lg
-                ${
-                  theme === "dark"
-                    ? "border-gray-700 bg-gray-900"
-                    : "border-gray-200 bg-gray-50"
-                }
-                `}
+              className={`shrink-0 p-3 border-t ${
+                isDark
+                  ? "border-gray-800 bg-gray-900"
+                  : "border-gray-100 bg-white"
+              }`}
             >
-              <div className="flex space-x-3">
+              <div className="flex gap-2">
                 <input
                   type="text"
                   dir="auto"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  placeholder="Ask a question about my resume..."
-                  className={`flex-1 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200
-                    ${
-                      theme === "dark"
-                        ? "bg-gray-800 text-gray-300 placeholder-gray-500"
-                        : "bg-white text-gray-800 placeholder-gray-400"
-                    }
-                    `}
-                  disabled={isLoading || isSummarizing || isGeneratingQuestions}
+                  placeholder="Ask about my resume..."
+                  className={`flex-1 px-4 py-2.5 text-sm rounded-xl border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 ${
+                    isDark
+                      ? "bg-gray-800 border-gray-700/60 text-white placeholder-gray-500 focus:border-indigo-500/50"
+                      : "bg-gray-50 border-gray-200 text-gray-900 placeholder-gray-400 focus:border-indigo-400"
+                  }`}
+                  disabled={isBusy}
                 />
                 <button
                   type="submit"
-                  className={`text-white px-4 py-3 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center
-                    ${
-                      theme === "dark"
-                        ? "bg-indigo-800 hover:bg-indigo-700 focus:ring-indigo-500"
-                        : "bg-indigo-600 hover:bg-indigo-500 focus:ring-indigo-400"
-                    }
-                    `}
-                  disabled={isLoading || isSummarizing || isGeneratingQuestions}
+                  disabled={isBusy || input.trim() === ""}
+                  className={`p-2.5 rounded-xl transition-all duration-200 flex items-center justify-center cursor-pointer disabled:cursor-not-allowed disabled:opacity-40 ${
+                    isDark
+                      ? "bg-indigo-600 text-white hover:bg-indigo-500 disabled:hover:bg-indigo-600"
+                      : "bg-indigo-600 text-white hover:bg-indigo-500 disabled:hover:bg-indigo-600"
+                  }`}
                 >
-                  {isLoading ? "Sending..." : <Send className="h-5 w-5" />}
+                  {isLoading ? (
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                  ) : (
+                    <Send className="w-5 h-5" />
+                  )}
                 </button>
               </div>
             </form>
