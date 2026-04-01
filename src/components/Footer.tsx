@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Link as ScrollLink } from "react-scroll";
-import { Github, Linkedin, Mail, Heart, ArrowUp } from "lucide-react";
+import { Github, Linkedin, Mail, ArrowUp } from "lucide-react";
 import { useTheme } from "../context/ThemeContext";
 
 const navLinks = [
@@ -148,9 +148,7 @@ const Footer: React.FC = () => {
               isDark ? "text-gray-500" : "text-gray-400"
             }`}
           >
-            © {year} Mohamed Samy. Made with
-            <Heart className="w-3.5 h-3.5 text-red-500 fill-red-500 inline" />
-            All rights reserved.
+            © {year} Mohamed Samy. Made with ❤️ All rights reserved.
           </p>
 
           <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.95 }}>

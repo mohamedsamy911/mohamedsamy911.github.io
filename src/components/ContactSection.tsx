@@ -27,13 +27,13 @@ const contactInfo = [
   {
     icon: <Phone className="w-5 h-5" />,
     label: "Phone",
-    value: "+20 120 320 8888",
-    href: "tel:+201203208888",
+    value: "+996 5065 557963",
+    href: "tel:+996506557963",
   },
   {
     icon: <MapPin className="w-5 h-5" />,
     label: "Location",
-    value: "Cairo, Egypt",
+    value: "Riyadh, Saudi Arabia",
     href: null,
   },
 ];

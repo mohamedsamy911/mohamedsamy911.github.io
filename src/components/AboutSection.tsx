@@ -1,7 +1,7 @@
 import { motion, useInView } from "framer-motion";
 import React, { useEffect, useRef, useState, type JSX } from "react";
 import { RESUME_CONTENT } from "../constants";
-import resumePdfPath from "../assets/Resume 22025.pdf";
+import resumePdfPath from "../assets/Mohamed_Samy_Resume.pdf";
 import { useTheme } from "../context/ThemeContext";
 import {
   Code,
