@@ -27,7 +27,7 @@ const contactInfo = [
   {
     icon: <Phone className="w-5 h-5" />,
     label: "Phone",
-    value: "+996 5065 557963",
+    value: "+996 5065 57963",
     href: "tel:+996506557963",
   },
   {
