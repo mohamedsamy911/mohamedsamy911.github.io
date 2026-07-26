@@ -13,20 +13,20 @@ const ProjectsSection: React.FC = () => {
       id="projects"
       className={`min-h-screen w-full py-24 px-4 relative overflow-hidden ${
         isDark
-          ? "bg-gradient-to-b from-gray-900 via-gray-900 to-gray-800"
-          : "bg-gradient-to-b from-gray-50 via-white to-gray-50"
+          ? "bg-gradient-to-b from-slate-900 via-slate-900 to-slate-800"
+          : "bg-gradient-to-b from-slate-50 via-white to-slate-50"
       }`}
     >
       {/* Decorative Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div
           className={`absolute top-1/4 -left-32 w-96 h-96 rounded-full blur-3xl opacity-20 ${
-            isDark ? "bg-indigo-600" : "bg-indigo-300"
+            isDark ? "bg-blue-600" : "bg-blue-300"
           }`}
         />
         <div
           className={`absolute bottom-1/4 -right-32 w-96 h-96 rounded-full blur-3xl opacity-20 ${
-            isDark ? "bg-purple-600" : "bg-purple-300"
+            isDark ? "bg-sky-600" : "bg-sky-300"
           }`}
         />
       </div>
@@ -41,39 +41,23 @@ const ProjectsSection: React.FC = () => {
         >
           {/* Header */}
           <div className="text-center mb-16">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-              className="inline-block"
-            >
-              <span
-                className={`inline-block px-4 py-2 rounded-full text-sm font-semibold mb-4 ${
-                  isDark
-                    ? "bg-indigo-500/10 text-indigo-400 border border-indigo-500/20"
-                    : "bg-indigo-100 text-indigo-700 border border-indigo-200"
-                }`}
-              >
-                Portfolio Showcase
-              </span>
-            </motion.div>
             <h2
               className={`text-4xl md:text-6xl font-bold mb-4 ${
-                isDark ? "text-white" : "text-gray-900"
+                isDark ? "text-white" : "text-slate-900"
               }`}
             >
               My{" "}
-              <span className="text-indigo-600 dark:text-indigo-400">
+              <span className="text-blue-600 dark:text-blue-400">
                 Projects
               </span>
             </h2>
             <p
               className={`text-lg max-w-2xl mx-auto ${
-                isDark ? "text-gray-400" : "text-gray-600"
+                isDark ? "text-slate-400" : "text-slate-600"
               }`}
             >
-              Explore my latest work and creative solutions
+              Production systems I've shipped — full-stack apps, APIs, and the
+              infrastructure that keeps them running
             </p>
           </div>
 
@@ -89,8 +73,8 @@ const ProjectsSection: React.FC = () => {
                 whileHover={{ y: -8 }}
                 className={`rounded-3xl overflow-hidden backdrop-blur-sm transition-all duration-300 group relative flex flex-col ${
                   isDark
-                    ? "bg-gray-800/80 shadow-xl shadow-black/20 hover:shadow-2xl hover:shadow-indigo-500/20 border border-gray-700/50"
-                    : "bg-white/80 shadow-lg hover:shadow-2xl hover:shadow-indigo-300/30 border border-gray-200/50"
+                    ? "bg-slate-800/80 shadow-xl shadow-black/20 hover:shadow-2xl hover:shadow-blue-500/20 border border-slate-700/50"
+                    : "bg-white/80 shadow-lg hover:shadow-2xl hover:shadow-blue-300/30 border border-slate-200/50"
                 }`}
               >
                 <GlareHover
@@ -107,7 +91,9 @@ const ProjectsSection: React.FC = () => {
                     <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     <img
                       src={project.pic}
-                      alt={project.title}
+                      alt={`${project.title} — ${project.category} project screenshot`}
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                     />
 
@@ -124,8 +110,8 @@ const ProjectsSection: React.FC = () => {
                               ? "bg-blue-500/80 text-white"
                               : "bg-blue-100/90 text-blue-800"
                             : isDark
-                            ? "bg-indigo-500/80 text-white"
-                            : "bg-white/90 text-indigo-700"
+                            ? "bg-blue-500/80 text-white"
+                            : "bg-white/90 text-blue-700"
                         }`}
                       >
                         {project.category}
@@ -142,7 +128,7 @@ const ProjectsSection: React.FC = () => {
                           className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium backdrop-blur-md transition-all duration-200 hover:scale-105 ${
                             isDark
                               ? "bg-white/15 text-white hover:bg-white/25 border border-white/20"
-                              : "bg-white/90 text-gray-900 hover:bg-white shadow-lg"
+                              : "bg-white/90 text-slate-900 hover:bg-white shadow-lg"
                           }`}
                         >
                           <Github className="w-4 h-4" />
@@ -154,8 +140,8 @@ const ProjectsSection: React.FC = () => {
                           rel="noopener noreferrer"
                           className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium backdrop-blur-md transition-all duration-200 hover:scale-105 ${
                             isDark
-                              ? "bg-indigo-600/80 text-white hover:bg-indigo-500/90 border border-indigo-400/30"
-                              : "bg-indigo-600 text-white hover:bg-indigo-500 shadow-lg"
+                              ? "bg-blue-600/80 text-white hover:bg-blue-500/90 border border-blue-400/30"
+                              : "bg-blue-600 text-white hover:bg-blue-500 shadow-lg"
                           }`}
                         >
                           <ExternalLink className="w-4 h-4" />
@@ -173,7 +159,7 @@ const ProjectsSection: React.FC = () => {
                   >
                     <h3
                       className={`text-xl font-bold mb-3 ${
-                        isDark ? "text-white" : "text-gray-900"
+                        isDark ? "text-white" : "text-slate-900"
                       }`}
                       itemProp="name"
                     >
@@ -181,7 +167,7 @@ const ProjectsSection: React.FC = () => {
                     </h3>
                     <p
                       className={`mb-5 text-sm leading-relaxed flex-1 ${
-                        isDark ? "text-gray-300" : "text-gray-600"
+                        isDark ? "text-slate-300" : "text-slate-600"
                       }`}
                       itemProp="description"
                     >
@@ -203,8 +189,8 @@ const ProjectsSection: React.FC = () => {
                           className={`flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-lg font-medium transition-all duration-200 cursor-default
                           ${
                             isDark
-                              ? "bg-gradient-to-r from-indigo-500/10 to-purple-500/10 text-indigo-300 hover:from-indigo-500/20 hover:to-purple-500/20 border border-indigo-500/20"
-                              : "bg-gradient-to-r from-indigo-50 to-purple-50 text-indigo-700 hover:from-indigo-100 hover:to-purple-100 border border-indigo-200/50"
+                              ? "bg-gradient-to-r from-blue-500/10 to-sky-500/10 text-blue-300 hover:from-blue-500/20 hover:to-sky-500/20 border border-blue-500/20"
+                              : "bg-gradient-to-r from-blue-50 to-sky-50 text-blue-700 hover:from-blue-100 hover:to-sky-100 border border-blue-200/50"
                           }`}
                         >
                           {icon}

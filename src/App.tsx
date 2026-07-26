@@ -2,11 +2,14 @@ import "./App.css";
 import HeroSection from "./components/HeroSection";
 import { Navbar } from "./components/NavBar";
 import AboutSection from "./components/AboutSection";
+import ServicesSection from "./components/ServicesSection";
 import ContactSection from "./components/ContactSection";
 import ProjectsSection from "./components/ProjectsSection";
 import { ThemeProvider, useTheme } from "./context/ThemeContext";
 import AIChat from "./components/AIChat";
 import Footer from "./components/Footer";
+import StructuredData from "./components/StructuredData";
+import ConsentBanner from "./components/ConsentBanner";
 import { useEffect } from "react";
 
 function App() {
@@ -30,14 +33,17 @@ function PortfolioContent() {
     }
   }, [theme]);
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900 dark:text-white transition-colors duration-300">
+    <div className="min-h-screen bg-white dark:bg-slate-900 dark:text-white transition-colors duration-300">
+      <StructuredData />
       <Navbar />
       <HeroSection />
       <ProjectsSection />
       <AboutSection />
+      <ServicesSection />
       <ContactSection />
       <AIChat />
       <Footer />
+      <ConsentBanner />
     </div>
   );
 }

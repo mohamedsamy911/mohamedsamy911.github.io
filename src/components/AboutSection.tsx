@@ -202,18 +202,18 @@ const AboutSection: React.FC = () => {
     `px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 cursor-pointer ${
       activeTab === tab
         ? isDark
-          ? "bg-indigo-600 text-white shadow-lg shadow-indigo-500/30"
-          : "bg-indigo-600 text-white shadow-lg shadow-indigo-400/30"
+          ? "bg-blue-600 text-white shadow-lg shadow-blue-500/30"
+          : "bg-blue-600 text-white shadow-lg shadow-blue-400/30"
         : isDark
-        ? "text-gray-400 hover:text-white hover:bg-gray-800"
-        : "text-gray-500 hover:text-gray-900 hover:bg-gray-200"
+        ? "text-slate-400 hover:text-white hover:bg-slate-800"
+        : "text-slate-500 hover:text-slate-900 hover:bg-slate-200"
     }`;
 
   return (
     <section
       id="about"
       className={`w-full py-24 px-4 transition-colors duration-300 ${
-        isDark ? "bg-gray-900" : "bg-gray-100"
+        isDark ? "bg-slate-900" : "bg-slate-100"
       }`}
       aria-label="About Mohamed Samy - Software Engineer Skills and Experience"
     >
@@ -226,30 +226,17 @@ const AboutSection: React.FC = () => {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <motion.span
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5 }}
-            viewport={{ once: true }}
-            className={`inline-block px-4 py-2 rounded-full text-sm font-semibold mb-4 ${
-              isDark
-                ? "bg-indigo-500/10 text-indigo-400 border border-indigo-500/20"
-                : "bg-indigo-100 text-indigo-700 border border-indigo-200"
-            }`}
-          >
-            Get To Know Me
-          </motion.span>
           <h2
             className={`text-4xl md:text-6xl font-bold mb-6 ${
-              isDark ? "text-white" : "text-gray-900"
+              isDark ? "text-white" : "text-slate-900"
             }`}
           >
             About{" "}
-            <span className="text-indigo-600 dark:text-indigo-400">Me</span>
+            <span className="text-blue-600 dark:text-blue-400">Me</span>
           </h2>
           <p
             className={`text-lg max-w-2xl mx-auto leading-relaxed ${
-              isDark ? "text-gray-400" : "text-gray-600"
+              isDark ? "text-slate-400" : "text-slate-600"
             }`}
             itemProp="description"
           >
@@ -271,27 +258,27 @@ const AboutSection: React.FC = () => {
               key={stat.label}
               className={`rounded-2xl p-6 text-center border backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 ${
                 isDark
-                  ? "bg-gray-800/60 border-gray-700/50 hover:border-indigo-500/40"
-                  : "bg-white/80 border-gray-200/60 hover:border-indigo-300 shadow-sm"
+                  ? "bg-slate-800/60 border-slate-700/50 hover:border-blue-500/40"
+                  : "bg-white/80 border-slate-200/60 hover:border-blue-300 shadow-sm"
               }`}
             >
               <div
                 className={`inline-flex items-center justify-center w-10 h-10 rounded-xl mb-3 ${
-                  isDark ? "bg-indigo-500/10 text-indigo-400" : "bg-indigo-100 text-indigo-600"
+                  isDark ? "bg-blue-500/10 text-blue-400" : "bg-blue-100 text-blue-600"
                 }`}
               >
                 {stat.icon}
               </div>
               <div
                 className={`text-3xl md:text-4xl font-bold mb-1 ${
-                  isDark ? "text-white" : "text-gray-900"
+                  isDark ? "text-white" : "text-slate-900"
                 }`}
               >
                 <AnimatedCounter value={stat.value} suffix={stat.suffix} />
               </div>
               <div
                 className={`text-xs md:text-sm font-medium ${
-                  isDark ? "text-gray-400" : "text-gray-500"
+                  isDark ? "text-slate-400" : "text-slate-500"
                 }`}
               >
                 {stat.label}
@@ -352,8 +339,8 @@ const AboutSection: React.FC = () => {
                         className={`flex items-center px-4 py-2.5 rounded-xl border gap-2.5 text-sm font-medium 
                         ${
                           isDark
-                            ? "bg-indigo-500/10 text-indigo-200 border-indigo-600/40 hover:bg-indigo-600/20"
-                            : "bg-indigo-50 text-indigo-800 border-indigo-200 hover:bg-indigo-100"
+                            ? "bg-blue-500/10 text-blue-200 border-blue-600/40 hover:bg-blue-600/20"
+                            : "bg-blue-50 text-blue-800 border-blue-200 hover:bg-blue-100"
                         } transition-all duration-200 hover:-translate-y-0.5 cursor-default`}
                       >
                         {skillIconMap[skill] || <BadgeInfo className="w-4 h-4" />}
@@ -371,8 +358,8 @@ const AboutSection: React.FC = () => {
                     className={`mt-8 inline-flex items-center justify-center px-6 py-3 text-base font-medium rounded-xl shadow-lg transition-all duration-300 gap-2
                       ${
                         isDark
-                          ? "bg-indigo-600 text-white hover:bg-indigo-500 hover:shadow-indigo-500/30"
-                          : "bg-indigo-600 text-white hover:bg-indigo-500 hover:shadow-indigo-400/40"
+                          ? "bg-blue-600 text-white hover:bg-blue-500 hover:shadow-blue-500/30"
+                          : "bg-blue-600 text-white hover:bg-blue-500 hover:shadow-blue-400/40"
                       }
                     `}
                   >
@@ -394,7 +381,7 @@ const AboutSection: React.FC = () => {
                   {/* Timeline Line */}
                   <div
                     className={`absolute left-[15px] top-2 bottom-2 w-0.5 ${
-                      isDark ? "bg-indigo-500/20" : "bg-indigo-200"
+                      isDark ? "bg-blue-500/20" : "bg-blue-200"
                     }`}
                   />
 
@@ -412,25 +399,25 @@ const AboutSection: React.FC = () => {
                           className={`absolute left-[9px] top-1.5 w-3.5 h-3.5 rounded-full border-2 ${
                             idx === 0
                               ? isDark
-                                ? "bg-indigo-500 border-indigo-400 shadow-lg shadow-indigo-500/40"
-                                : "bg-indigo-600 border-indigo-500 shadow-lg shadow-indigo-400/40"
+                                ? "bg-blue-500 border-blue-400 shadow-lg shadow-blue-500/40"
+                                : "bg-blue-600 border-blue-500 shadow-lg shadow-blue-400/40"
                               : isDark
-                              ? "bg-gray-700 border-gray-600"
-                              : "bg-gray-300 border-gray-400"
+                              ? "bg-slate-700 border-slate-600"
+                              : "bg-slate-300 border-slate-400"
                           }`}
                         />
 
                         <div
                           className={`rounded-2xl p-5 border transition-all duration-300 ${
                             isDark
-                              ? "bg-gray-800/50 border-gray-700/50 hover:border-indigo-500/30"
-                              : "bg-white border-gray-200 hover:border-indigo-300 shadow-sm"
+                              ? "bg-slate-800/50 border-slate-700/50 hover:border-blue-500/30"
+                              : "bg-white border-slate-200 hover:border-blue-300 shadow-sm"
                           }`}
                         >
                           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 mb-3">
                             <h4
                               className={`text-lg font-bold ${
-                                isDark ? "text-white" : "text-gray-900"
+                                isDark ? "text-white" : "text-slate-900"
                               }`}
                             >
                               {job.role}
@@ -438,8 +425,8 @@ const AboutSection: React.FC = () => {
                             <span
                               className={`text-xs font-medium px-3 py-1 rounded-full whitespace-nowrap ${
                                 isDark
-                                  ? "bg-indigo-500/10 text-indigo-300"
-                                  : "bg-indigo-100 text-indigo-700"
+                                  ? "bg-blue-500/10 text-blue-300"
+                                  : "bg-blue-100 text-blue-700"
                               }`}
                             >
                               {job.period}
@@ -448,7 +435,7 @@ const AboutSection: React.FC = () => {
                           <div className="flex items-center gap-3 mb-3">
                             <span
                               className={`flex items-center gap-1.5 text-sm ${
-                                isDark ? "text-indigo-400" : "text-indigo-600"
+                                isDark ? "text-blue-400" : "text-blue-600"
                               }`}
                             >
                               <Briefcase className="w-3.5 h-3.5" />
@@ -456,7 +443,7 @@ const AboutSection: React.FC = () => {
                             </span>
                             <span
                               className={`flex items-center gap-1 text-xs ${
-                                isDark ? "text-gray-500" : "text-gray-400"
+                                isDark ? "text-slate-500" : "text-slate-400"
                               }`}
                             >
                               <MapPin className="w-3 h-3" />
@@ -468,10 +455,10 @@ const AboutSection: React.FC = () => {
                               <li
                                 key={i}
                                 className={`text-sm leading-relaxed flex gap-2 ${
-                                  isDark ? "text-gray-400" : "text-gray-600"
+                                  isDark ? "text-slate-400" : "text-slate-600"
                                 }`}
                               >
-                                <span className="text-indigo-500 mt-1 shrink-0">▸</span>
+                                <span className="text-blue-500 mt-1 shrink-0">▸</span>
                                 {h}
                               </li>
                             ))}
@@ -500,15 +487,15 @@ const AboutSection: React.FC = () => {
                       transition={{ duration: 0.4, delay: idx * 0.1 }}
                       className={`rounded-2xl p-5 border flex gap-4 items-start transition-all duration-300 ${
                         isDark
-                          ? "bg-gray-800/50 border-gray-700/50 hover:border-indigo-500/30"
-                          : "bg-white border-gray-200 hover:border-indigo-300 shadow-sm"
+                          ? "bg-slate-800/50 border-slate-700/50 hover:border-blue-500/30"
+                          : "bg-white border-slate-200 hover:border-blue-300 shadow-sm"
                       }`}
                     >
                       <div
                         className={`shrink-0 w-11 h-11 rounded-xl flex items-center justify-center ${
                           isDark
-                            ? "bg-indigo-500/10 text-indigo-400"
-                            : "bg-indigo-100 text-indigo-600"
+                            ? "bg-blue-500/10 text-blue-400"
+                            : "bg-blue-100 text-blue-600"
                         }`}
                       >
                         <GraduationCap className="w-5 h-5" />
@@ -516,21 +503,21 @@ const AboutSection: React.FC = () => {
                       <div>
                         <h4
                           className={`text-base font-bold ${
-                            isDark ? "text-white" : "text-gray-900"
+                            isDark ? "text-white" : "text-slate-900"
                           }`}
                         >
                           {edu.degree}
                         </h4>
                         <p
                           className={`text-sm ${
-                            isDark ? "text-indigo-400" : "text-indigo-600"
+                            isDark ? "text-blue-400" : "text-blue-600"
                           }`}
                         >
                           {edu.school}
                         </p>
                         <p
                           className={`text-xs mt-1 ${
-                            isDark ? "text-gray-500" : "text-gray-400"
+                            isDark ? "text-slate-500" : "text-slate-400"
                           }`}
                         >
                           {edu.period}
@@ -556,13 +543,13 @@ const AboutSection: React.FC = () => {
               className={`rounded-3xl p-7 shadow-xl border backdrop-blur-xl transition-all duration-300 sticky top-24
               ${
                 isDark
-                  ? "bg-gradient-to-br from-indigo-900/30 to-indigo-600/10 border-indigo-600/20"
-                  : "bg-gradient-to-br from-white to-indigo-50 border-indigo-200"
+                  ? "bg-gradient-to-br from-blue-900/30 to-blue-600/10 border-blue-600/20"
+                  : "bg-gradient-to-br from-white to-blue-50 border-blue-200"
               }`}
             >
               <h3
                 className={`text-2xl font-bold mb-6 tracking-tight ${
-                  isDark ? "text-white" : "text-gray-800"
+                  isDark ? "text-white" : "text-slate-800"
                 }`}
               >
                 Proficiency
@@ -573,14 +560,14 @@ const AboutSection: React.FC = () => {
                     <div className="flex justify-between mb-1.5">
                       <span
                         className={`text-sm font-medium ${
-                          isDark ? "text-gray-300" : "text-gray-700"
+                          isDark ? "text-slate-300" : "text-slate-700"
                         }`}
                       >
                         {item.technology}
                       </span>
                       <span
                         className={`text-sm font-semibold ${
-                          isDark ? "text-indigo-300" : "text-indigo-600"
+                          isDark ? "text-blue-300" : "text-blue-600"
                         }`}
                       >
                         {item.years}+ {item.years === 1 ? "year" : "years"}
@@ -588,7 +575,7 @@ const AboutSection: React.FC = () => {
                     </div>
                     <div
                       className={`w-full h-2 rounded-full overflow-hidden ${
-                        isDark ? "bg-gray-700" : "bg-gray-200"
+                        isDark ? "bg-slate-700" : "bg-slate-200"
                       }`}
                     >
                       <motion.div
@@ -601,8 +588,8 @@ const AboutSection: React.FC = () => {
                         transition={{ duration: 0.8, delay: idx * 0.08 }}
                         className={`h-full rounded-full ${
                           isDark
-                            ? "bg-gradient-to-r from-indigo-500 to-purple-500"
-                            : "bg-gradient-to-r from-indigo-500 to-indigo-600"
+                            ? "bg-gradient-to-r from-blue-500 to-sky-400"
+                            : "bg-gradient-to-r from-blue-500 to-blue-600"
                         }`}
                       />
                     </div>

@@ -12,7 +12,7 @@ export default function ThemeToggle({ className }: ThemeToggleProps) {
     <button
       onClick={toggleTheme}
       className={[
-        "relative w-12 h-6 rounded-full bg-gray-200 dark:bg-gray-700 focus:outline-none",
+        "relative w-12 h-6 rounded-full bg-slate-200 dark:bg-slate-700 focus:outline-none",
         className,
       ]
         .filter(Boolean)
@@ -21,7 +21,7 @@ export default function ThemeToggle({ className }: ThemeToggleProps) {
     >
       <motion.div
         className={`absolute top-0.5 w-5 h-5 rounded-full flex items-center justify-center ${
-          theme === "light" ? "bg-yellow-400" : "bg-gray-300"
+          theme === "light" ? "bg-yellow-400" : "bg-slate-300"
         }`}
         initial={false}
         animate={{
@@ -45,7 +45,7 @@ export default function ThemeToggle({ className }: ThemeToggleProps) {
           </svg>
         ) : (
           <svg
-            className="w-4 h-4 text-gray-800"
+            className="w-4 h-4 text-slate-800"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"

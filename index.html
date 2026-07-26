@@ -2,7 +2,9 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/logo.webp" />
+    <link rel="icon" type="image/webp" href="/logo.webp" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- Google Search Console -->
@@ -29,7 +31,10 @@
       content="Mohamed Samy, software engineer, full stack developer, React.js developer, Node.js developer, NestJS developer, TypeScript developer, Egyptian software engineer, web developer, microservices, DevOps, PostgreSQL, Docker, JavaScript developer"
     />
     <meta name="author" content="Mohamed Samy" />
-    <meta name="robots" content="index, follow" />
+    <meta
+      name="robots"
+      content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    />
     <meta name="googlebot" content="index, follow" />
     <meta name="revisit-after" content="7 days" />
 
@@ -46,9 +51,15 @@
     />
     <meta
       property="og:image"
-      content="https://mohamedsamy911.github.io/me.webp"
+      content="https://mohamedsamy911.github.io/og-image.png"
     />
-    <meta property="og:image:alt" content="Mohamed Samy - Software Engineer" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Mohamed Samy - Full Stack Software Engineer"
+    />
     <meta property="og:site_name" content="Mohamed Samy Portfolio" />
     <meta property="og:locale" content="en_US" />
 
@@ -65,19 +76,19 @@
     />
     <meta
       property="twitter:image"
-      content="https://mohamedsamy911.github.io/me.webp"
+      content="https://mohamedsamy911.github.io/og-image.png"
     />
     <meta
       property="twitter:image:alt"
-      content="Mohamed Samy - Software Engineer"
+      content="Mohamed Samy - Full Stack Software Engineer"
     />
 
     <!-- Canonical URL -->
     <link rel="canonical" href="https://mohamedsamy911.github.io/" />
 
     <!-- Theme Color -->
-    <meta name="theme-color" content="#4F46E5" />
-    <meta name="msapplication-TileColor" content="#4F46E5" />
+    <meta name="theme-color" content="#2563EB" />
+    <meta name="msapplication-TileColor" content="#2563EB" />
 
     <!-- Preload critical resources -->
     <link rel="preload" as="image" href="/me.webp" fetchpriority="high" />
@@ -87,37 +98,96 @@
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "Person",
-        "name": "Mohamed Samy",
-        "jobTitle": "Full Stack Software Engineer",
-        "description": "Professional Full Stack Software Engineer specializing in React.js, Node.js, NestJS, TypeScript, and DevOps",
-        "url": "https://mohamedsamy911.github.io/",
-        "image": "https://mohamedsamy911.github.io/me.webp",
-        "sameAs": [
-          "https://github.com/mohamedsamy911",
-          "https://www.linkedin.com/in/mohamed-samy-ba0107141/"
-        ],
-        "knowsAbout": [
-          "React.js",
-          "Node.js",
-          "NestJS",
-          "TypeScript",
-          "JavaScript",
-          "Docker",
-          "PostgreSQL",
-          "Microservices",
-          "DevOps",
-          "Full Stack Development"
-        ],
-        "alumniOf": {
-          "@type": "Organization",
-          "name": "Faculty of Civil Engineering, German University in Cairo"
-        },
-        "nationality": {
-          "@type": "Country",
-          "name": "Egypt"
-        }
+        "@graph": [
+          {
+            "@type": "Person",
+            "@id": "https://mohamedsamy911.github.io/#person",
+            "name": "Mohamed Samy",
+            "givenName": "Mohamed",
+            "familyName": "Samy",
+            "jobTitle": "Full Stack Software Engineer",
+            "description": "Full Stack Software Engineer with 5+ years building scalable, secure web applications with React.js, Node.js, NestJS, Java, TypeScript, and DevOps (Docker, NGINX, Linux).",
+            "url": "https://mohamedsamy911.github.io/",
+            "image": "https://mohamedsamy911.github.io/me.webp",
+            "email": "mailto:mohamedadel74@gmail.com",
+            "sameAs": [
+              "https://github.com/mohamedsamy911",
+              "https://www.linkedin.com/in/mohamed-samy-ba0107141/"
+            ],
+            "worksFor": {
+              "@type": "Organization",
+              "name": "Penta-b"
+            },
+            "alumniOf": [
+              {
+                "@type": "CollegeOrUniversity",
+                "name": "German University in Cairo (GUC)"
+              },
+              {
+                "@type": "EducationalOrganization",
+                "name": "Route Academy"
+              }
+            ],
+            "knowsLanguage": ["English", "Arabic", "German"],
+            "knowsAbout": [
+              "React.js",
+              "Next.js",
+              "Node.js",
+              "NestJS",
+              "TypeScript",
+              "JavaScript",
+              "Java (Spring Boot)",
+              "Docker",
+              "Docker Swarm",
+              "NGINX",
+              "PostgreSQL",
+              "REST APIs",
+              "Microservices",
+              "CI/CD",
+              "DevOps",
+              "Camunda BPM"
+            ]
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://mohamedsamy911.github.io/#website",
+            "url": "https://mohamedsamy911.github.io/",
+            "name": "Mohamed Samy — Full Stack Software Engineer",
+            "description": "Portfolio of Mohamed Samy, a Full Stack Software Engineer specializing in React.js, Node.js, NestJS, and DevOps.",
+            "inLanguage": "en",
+            "publisher": { "@id": "https://mohamedsamy911.github.io/#person" }
+          }
+        ]
       }
+    </script>
+
+    <!-- Google Analytics (GA4) with Consent Mode v2 -->
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      // Default: deny until the visitor grants consent (see ConsentBanner).
+      gtag("consent", "default", {
+        ad_storage: "denied",
+        ad_user_data: "denied",
+        ad_personalization: "denied",
+        analytics_storage: "denied",
+        functionality_storage: "denied",
+        personalization_storage: "denied",
+      });
+      (function () {
+        var id = "%VITE_GA_MEASUREMENT_ID%";
+        // Skip entirely if no valid GA4 id was injected at build time.
+        if (!id || id.indexOf("G-") !== 0) return;
+        window.__GA_ID__ = id;
+        var s = document.createElement("script");
+        s.async = true;
+        s.src = "https://www.googletagmanager.com/gtag/js?id=" + id;
+        document.head.appendChild(s);
+        gtag("config", id, { anonymize_ip: true });
+      })();
     </script>
   </head>
   <body>

@@ -5,8 +5,11 @@ import {
   Container,
   Database,
   Layers,
+  Network,
+  Workflow,
   Zap,
 } from "lucide-react";
+import type { JSX } from "react";
 import hms from "../assets/hms.webp";
 import ras from "../assets/ras.webp";
 import ecommerce from "../assets/e-commerce.webp";
@@ -67,6 +70,43 @@ export const projects = [
       { label: "WebSockets", icon: <Zap className="w-3.5 h-3.5" /> },
     ],
     pic: hms,
+  },
+];
+
+// Services / What I do
+export const services: {
+  title: string;
+  description: string;
+  icon: JSX.Element;
+  keywords: string[];
+}[] = [
+  {
+    title: "Full-Stack Web Applications",
+    description:
+      "End-to-end apps from a React.js / Next.js front end to a NestJS, Node.js, or Java back end — typed, tested, and built to scale.",
+    icon: <Code2 className="w-6 h-6" />,
+    keywords: ["React", "Next.js", "NestJS", "Node.js", "TypeScript"],
+  },
+  {
+    title: "APIs & Microservices",
+    description:
+      "RESTful APIs and microservices architecture with clean contracts and caching — cutting response times by up to 40%.",
+    icon: <Network className="w-6 h-6" />,
+    keywords: ["REST APIs", "Microservices", "PostgreSQL", "Redis"],
+  },
+  {
+    title: "DevOps & Deployment",
+    description:
+      "Containerized delivery with Docker & Docker Swarm behind NGINX on Linux, with CI/CD pipelines — reducing downtime by ~30%.",
+    icon: <Container className="w-6 h-6" />,
+    keywords: ["Docker", "Docker Swarm", "NGINX", "Linux", "CI/CD"],
+  },
+  {
+    title: "Workflow Automation",
+    description:
+      "Business-process automation with Camunda BPM (BPMN/DMN) that replaces manual steps — reducing processing effort by ~50%.",
+    icon: <Workflow className="w-6 h-6" />,
+    keywords: ["Camunda BPM", "BPMN", "Automation"],
   },
 ];
 

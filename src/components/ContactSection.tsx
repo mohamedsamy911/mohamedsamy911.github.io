@@ -27,8 +27,8 @@ const contactInfo = [
   {
     icon: <Phone className="w-5 h-5" />,
     label: "Phone",
-    value: "+996 5065 57963",
-    href: "tel:+996506557963",
+    value: "+966 50 655 7963",
+    href: "tel:+966506557963",
   },
   {
     icon: <MapPin className="w-5 h-5" />,
@@ -97,10 +97,10 @@ const ContactSection: React.FC = () => {
     }
   };
 
-  const inputClass = `w-full rounded-xl px-4 py-3.5 text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 ${
+  const inputClass = `w-full rounded-xl px-4 py-3.5 text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/50 ${
     isDark
-      ? "bg-gray-800/80 border border-gray-700/60 text-white placeholder-gray-500 focus:border-indigo-500/50"
-      : "bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400 focus:border-indigo-400"
+      ? "bg-slate-800/80 border border-slate-700/60 text-white placeholder-slate-500 focus:border-blue-500/50"
+      : "bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:border-blue-400"
   }`;
 
   return (
@@ -108,8 +108,8 @@ const ContactSection: React.FC = () => {
       id="contact"
       className={`w-full py-24 px-4 relative overflow-hidden ${
         isDark
-          ? "bg-gradient-to-b from-gray-900 via-gray-900 to-gray-800"
-          : "bg-gradient-to-b from-gray-50 via-white to-gray-50"
+          ? "bg-gradient-to-b from-slate-900 via-slate-900 to-slate-800"
+          : "bg-gradient-to-b from-slate-50 via-white to-slate-50"
       }`}
       itemScope
       itemType="https://schema.org/ContactPage"
@@ -118,12 +118,12 @@ const ContactSection: React.FC = () => {
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div
           className={`absolute -top-32 -left-32 w-96 h-96 rounded-full blur-3xl opacity-20 ${
-            isDark ? "bg-indigo-600" : "bg-indigo-300"
+            isDark ? "bg-blue-600" : "bg-blue-300"
           }`}
         />
         <div
           className={`absolute -bottom-32 -right-32 w-96 h-96 rounded-full blur-3xl opacity-20 ${
-            isDark ? "bg-purple-600" : "bg-purple-300"
+            isDark ? "bg-sky-600" : "bg-sky-300"
           }`}
         />
       </div>
@@ -137,34 +137,21 @@ const ContactSection: React.FC = () => {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <motion.span
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5 }}
-            viewport={{ once: true }}
-            className={`inline-block px-4 py-2 rounded-full text-sm font-semibold mb-4 ${
-              isDark
-                ? "bg-indigo-500/10 text-indigo-400 border border-indigo-500/20"
-                : "bg-indigo-100 text-indigo-700 border border-indigo-200"
-            }`}
-          >
-            Let's Connect
-          </motion.span>
           <h2
             className={`text-4xl md:text-6xl font-bold mb-4 ${
-              isDark ? "text-white" : "text-gray-900"
+              isDark ? "text-white" : "text-slate-900"
             }`}
           >
             Get In{" "}
-            <span className="text-indigo-600 dark:text-indigo-400">Touch</span>
+            <span className="text-blue-600 dark:text-blue-400">Touch</span>
           </h2>
           <p
             className={`text-lg max-w-xl mx-auto ${
-              isDark ? "text-gray-400" : "text-gray-600"
+              isDark ? "text-slate-400" : "text-slate-600"
             }`}
           >
-            Have a project in mind or want to collaborate? I'd love to hear from
-            you.
+            Building something that needs a full-stack engineer? Send a
+            message — I read every one.
           </p>
         </motion.div>
 
@@ -193,15 +180,15 @@ const ContactSection: React.FC = () => {
                       href={item.href}
                       className={`flex items-center gap-4 p-4 rounded-2xl border transition-all duration-300 hover:-translate-y-0.5 ${
                         isDark
-                          ? "bg-gray-800/50 border-gray-700/50 hover:border-indigo-500/40 hover:bg-gray-800/80"
-                          : "bg-white border-gray-200 hover:border-indigo-300 hover:shadow-md shadow-sm"
+                          ? "bg-slate-800/50 border-slate-700/50 hover:border-blue-500/40 hover:bg-slate-800/80"
+                          : "bg-white border-slate-200 hover:border-blue-300 hover:shadow-md shadow-sm"
                       }`}
                     >
                       <div
                         className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 transition-colors duration-200 ${
                           isDark
-                            ? "bg-indigo-500/10 text-indigo-400 group-hover:bg-indigo-500/20"
-                            : "bg-indigo-100 text-indigo-600 group-hover:bg-indigo-200"
+                            ? "bg-blue-500/10 text-blue-400 group-hover:bg-blue-500/20"
+                            : "bg-blue-100 text-blue-600 group-hover:bg-blue-200"
                         }`}
                       >
                         {item.icon}
@@ -209,14 +196,14 @@ const ContactSection: React.FC = () => {
                       <div>
                         <p
                           className={`text-xs font-medium uppercase tracking-wider mb-0.5 ${
-                            isDark ? "text-gray-500" : "text-gray-400"
+                            isDark ? "text-slate-500" : "text-slate-400"
                           }`}
                         >
                           {item.label}
                         </p>
                         <p
                           className={`text-sm font-semibold ${
-                            isDark ? "text-white" : "text-gray-900"
+                            isDark ? "text-white" : "text-slate-900"
                           }`}
                         >
                           {item.value}
@@ -227,15 +214,15 @@ const ContactSection: React.FC = () => {
                     <div
                       className={`flex items-center gap-4 p-4 rounded-2xl border transition-all duration-300 ${
                         isDark
-                          ? "bg-gray-800/50 border-gray-700/50"
-                          : "bg-white border-gray-200 shadow-sm"
+                          ? "bg-slate-800/50 border-slate-700/50"
+                          : "bg-white border-slate-200 shadow-sm"
                       }`}
                     >
                       <div
                         className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${
                           isDark
-                            ? "bg-indigo-500/10 text-indigo-400"
-                            : "bg-indigo-100 text-indigo-600"
+                            ? "bg-blue-500/10 text-blue-400"
+                            : "bg-blue-100 text-blue-600"
                         }`}
                       >
                         {item.icon}
@@ -243,14 +230,14 @@ const ContactSection: React.FC = () => {
                       <div>
                         <p
                           className={`text-xs font-medium uppercase tracking-wider mb-0.5 ${
-                            isDark ? "text-gray-500" : "text-gray-400"
+                            isDark ? "text-slate-500" : "text-slate-400"
                           }`}
                         >
                           {item.label}
                         </p>
                         <p
                           className={`text-sm font-semibold ${
-                            isDark ? "text-white" : "text-gray-900"
+                            isDark ? "text-white" : "text-slate-900"
                           }`}
                         >
                           {item.value}
@@ -271,7 +258,7 @@ const ContactSection: React.FC = () => {
             >
               <h3
                 className={`text-sm font-semibold uppercase tracking-wider mb-4 ${
-                  isDark ? "text-gray-500" : "text-gray-400"
+                  isDark ? "text-slate-500" : "text-slate-400"
                 }`}
               >
                 Find Me On
@@ -288,8 +275,8 @@ const ContactSection: React.FC = () => {
                     whileTap={{ scale: 0.95 }}
                     className={`flex items-center gap-2.5 px-5 py-3 rounded-xl border font-medium text-sm transition-all duration-200 ${
                       isDark
-                        ? "bg-gray-800/50 border-gray-700/50 text-gray-300 hover:border-indigo-500/40 hover:text-indigo-400"
-                        : "bg-white border-gray-200 text-gray-700 hover:border-indigo-300 hover:text-indigo-600 shadow-sm"
+                        ? "bg-slate-800/50 border-slate-700/50 text-slate-300 hover:border-blue-500/40 hover:text-blue-400"
+                        : "bg-white border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-600 shadow-sm"
                     }`}
                   >
                     {social.icon}
@@ -307,33 +294,32 @@ const ContactSection: React.FC = () => {
               viewport={{ once: true }}
               className={`rounded-2xl p-5 border ${
                 isDark
-                  ? "bg-gradient-to-br from-indigo-900/20 to-purple-900/10 border-indigo-600/20"
-                  : "bg-gradient-to-br from-indigo-50 to-purple-50 border-indigo-200/60"
+                  ? "bg-gradient-to-br from-blue-900/20 to-sky-900/10 border-blue-600/20"
+                  : "bg-gradient-to-br from-blue-50 to-sky-50 border-blue-200/60"
               }`}
             >
               <p
                 className={`text-sm leading-relaxed ${
-                  isDark ? "text-gray-400" : "text-gray-600"
+                  isDark ? "text-slate-400" : "text-slate-600"
                 }`}
               >
-                I'm always open to discussing{" "}
+                Available for{" "}
                 <span
                   className={`font-semibold ${
-                    isDark ? "text-indigo-400" : "text-indigo-600"
+                    isDark ? "text-blue-400" : "text-blue-600"
                   }`}
                 >
-                  new projects
-                </span>
-                ,{" "}
+                  freelance contracts
+                </span>{" "}
+                and full-time roles. If it involves React, NestJS, or{" "}
                 <span
                   className={`font-semibold ${
-                    isDark ? "text-indigo-400" : "text-indigo-600"
+                    isDark ? "text-blue-400" : "text-blue-600"
                   }`}
                 >
-                  creative ideas
+                  backend infrastructure
                 </span>
-                , or opportunities to be part of your vision. Let's build
-                something amazing together!
+                , let's talk.
               </p>
             </motion.div>
           </motion.div>
@@ -349,20 +335,20 @@ const ContactSection: React.FC = () => {
             <div
               className={`rounded-3xl p-8 md:p-10 border backdrop-blur-sm transition-all duration-300 ${
                 isDark
-                  ? "bg-gray-800/40 border-gray-700/50 shadow-2xl shadow-black/20"
-                  : "bg-white border-gray-200 shadow-xl shadow-gray-200/50"
+                  ? "bg-slate-800/40 border-slate-700/50 shadow-2xl shadow-black/20"
+                  : "bg-white border-slate-200 shadow-xl shadow-slate-200/50"
               }`}
             >
               <h3
                 className={`text-2xl font-bold mb-2 ${
-                  isDark ? "text-white" : "text-gray-900"
+                  isDark ? "text-white" : "text-slate-900"
                 }`}
               >
                 Send a Message
               </h3>
               <p
                 className={`text-sm mb-8 ${
-                  isDark ? "text-gray-500" : "text-gray-400"
+                  isDark ? "text-slate-500" : "text-slate-400"
                 }`}
               >
                 Fill out the form below and I'll get back to you as soon as
@@ -375,7 +361,7 @@ const ContactSection: React.FC = () => {
                     <label
                       htmlFor="name"
                       className={`block text-xs font-semibold uppercase tracking-wider mb-2 ${
-                        isDark ? "text-gray-400" : "text-gray-500"
+                        isDark ? "text-slate-400" : "text-slate-500"
                       }`}
                     >
                       Your Name
@@ -395,7 +381,7 @@ const ContactSection: React.FC = () => {
                     <label
                       htmlFor="email"
                       className={`block text-xs font-semibold uppercase tracking-wider mb-2 ${
-                        isDark ? "text-gray-400" : "text-gray-500"
+                        isDark ? "text-slate-400" : "text-slate-500"
                       }`}
                     >
                       Your Email
@@ -417,7 +403,7 @@ const ContactSection: React.FC = () => {
                   <label
                     htmlFor="message"
                     className={`block text-xs font-semibold uppercase tracking-wider mb-2 ${
-                      isDark ? "text-gray-400" : "text-gray-500"
+                      isDark ? "text-slate-400" : "text-slate-500"
                     }`}
                   >
                     Message
@@ -444,11 +430,11 @@ const ContactSection: React.FC = () => {
                     ${
                       isSending
                         ? isDark
-                          ? "bg-indigo-600/50 text-indigo-300"
-                          : "bg-indigo-400 text-white"
+                          ? "bg-blue-600/50 text-blue-300"
+                          : "bg-blue-400 text-white"
                         : isDark
-                        ? "bg-indigo-600 text-white hover:bg-indigo-500 shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/30"
-                        : "bg-indigo-600 text-white hover:bg-indigo-500 shadow-lg shadow-indigo-400/30 hover:shadow-indigo-400/40"
+                        ? "bg-blue-600 text-white hover:bg-blue-500 shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30"
+                        : "bg-blue-600 text-white hover:bg-blue-500 shadow-lg shadow-blue-400/30 hover:shadow-blue-400/40"
                     }
                     disabled:cursor-not-allowed
                   `}

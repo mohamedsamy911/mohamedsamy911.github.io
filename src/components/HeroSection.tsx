@@ -11,10 +11,10 @@ const HeroSection: React.FC = () => {
   const { theme } = useTheme();
   const [hovered, setHovered] = useState(false);
   const subtitles = useRef([
-    "JavaScript Developer",
     "Full Stack Engineer",
-    "React Specialist",
-    "Tech Enthusiast",
+    "React & NestJS Developer",
+    "Microservices & Docker",
+    "REST API Architect",
   ]);
 
   return (
@@ -22,8 +22,8 @@ const HeroSection: React.FC = () => {
       id="home"
       className={`relative min-h-screen w-full overflow-hidden flex flex-col justify-around ${
         theme === "dark"
-          ? "bg-gradient-to-br from-gray-900 to-gray-800"
-          : "bg-gradient-to-br from-blue-50 to-indigo-100"
+          ? "bg-gradient-to-br from-slate-900 to-slate-800"
+          : "bg-gradient-to-br from-blue-50 to-blue-100"
       }`}
     >
       {/* Animated background elements */}
@@ -32,7 +32,7 @@ const HeroSection: React.FC = () => {
           <motion.div
             key={i}
             className={`absolute rounded-full ${
-              theme === "dark" ? "bg-indigo-500/10" : "bg-indigo-400/20"
+              theme === "dark" ? "bg-blue-500/10" : "bg-blue-400/20"
             }`}
             initial={{
               x: Math.random() * window.innerWidth - window.innerWidth / 3,
@@ -59,8 +59,6 @@ const HeroSection: React.FC = () => {
       {/* Content */}
       <div
         className="relative z-10 flex h-full w-full flex-col-reverse md:flex-row-reverse items-center justify-around gap-8 px-4 text-center md:text-left mt-[5rem]"
-        itemScope
-        itemType="https://schema.org/Person"
       >
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -75,7 +73,7 @@ const HeroSection: React.FC = () => {
             grainUrl={grainUrl}
             iconUrl={iconUrl}
             showBehindGradient={true}
-            innerGradient="linear-gradient(145deg,#60496e8c 0%,#4b596344 100%)"
+            innerGradient="linear-gradient(145deg,#1e3a8a8c 0%,#33415544 100%)"
             status="Online"
             contactText="Contact Me"
             avatarUrl="/me.webp"
@@ -91,7 +89,7 @@ const HeroSection: React.FC = () => {
         >
           <motion.h1
             className={`mb-6 text-5xl font-bold md:text-7xl ${
-              theme === "dark" ? "text-white" : "text-gray-900"
+              theme === "dark" ? "text-white" : "text-slate-900"
             }`}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -103,15 +101,12 @@ const HeroSection: React.FC = () => {
               transition={{ type: "spring", stiffness: 400, damping: 10 }}
             >
               Hello, I'm{" "}
-              <span
-                className="text-indigo-600 dark:text-indigo-400"
-                itemProp="name"
-              >
+              <span className="text-blue-600 dark:text-blue-400">
                 <TrueFocus
                   sentence="Mohamed Samy"
                   manualMode={false}
                   blurAmount={5}
-                  borderColor={theme == "dark" ? "#E4ECFF" : "#615FFF"}
+                  borderColor={theme == "dark" ? "#93C5FD" : "#2563EB"}
                   animationDuration={2}
                   pauseBetweenAnimations={1}
                 />
@@ -122,11 +117,10 @@ const HeroSection: React.FC = () => {
           {/* Typing subtitle */}
           <motion.div
             className={`mb-8 text-xl md:text-2xl min-h-[2.5rem] flex justify-center md:justify-start ${
-              theme === "dark" ? "text-gray-300" : "text-gray-700"
+              theme === "dark" ? "text-slate-300" : "text-slate-700"
             }`}
             initial={{ opacity: 1 }}
             transition={{ delay: 0.6 }}
-            itemProp="jobTitle"
           >
             <motion.span
               id="typing-text"
@@ -138,8 +132,8 @@ const HeroSection: React.FC = () => {
                 text={subtitles.current}
                 textColors={
                   theme === "dark"
-                    ? ["#6366f1", "#818cf8", "#a5b4fc", "#c7d2fe"]
-                    : ["#4f46e5", "#4338ca", "#3730a3", "#312e81"]
+                    ? ["#60a5fa", "#3b82f6", "#2563eb", "#93c5fd"]
+                    : ["#2563eb", "#1d4ed8", "#1e40af", "#1e3a8a"]
                 }
                 typingSpeed={75}
                 pauseDuration={1500}
@@ -165,8 +159,8 @@ const HeroSection: React.FC = () => {
               onMouseLeave={() => setHovered(false)}
               className={`relative inline-flex items-center overflow-hidden rounded-full px-8 py-4 text-lg font-medium transition-all ${
                 theme === "dark"
-                  ? "bg-indigo-600 text-white hover:bg-indigo-700 hover:shadow-indigo-500/30"
-                  : "bg-indigo-500 text-white hover:bg-indigo-600 hover:shadow-indigo-400/30"
+                  ? "bg-blue-600 text-white hover:bg-blue-700 hover:shadow-blue-500/30"
+                  : "bg-blue-500 text-white hover:bg-blue-600 hover:shadow-blue-400/30"
               } hover:shadow-lg`}
             >
               <motion.span
@@ -228,7 +222,7 @@ const HeroSection: React.FC = () => {
         >
           <div
             className={`flex h-10 w-6 items-start justify-center rounded-full border-2 p-1 ${
-              theme === "dark" ? "border-white/50" : "border-gray-700/50"
+              theme === "dark" ? "border-white/50" : "border-slate-700/50"
             }`}
           >
             <motion.div
@@ -239,7 +233,7 @@ const HeroSection: React.FC = () => {
                 repeatType: "loop",
               }}
               className={`h-2 w-2 rounded-full ${
-                theme === "dark" ? "bg-white" : "bg-gray-800"
+                theme === "dark" ? "bg-white" : "bg-slate-800"
               }`}
             />
           </div>

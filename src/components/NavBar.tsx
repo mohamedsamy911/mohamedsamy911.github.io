@@ -9,6 +9,7 @@ const navItems = [
   { id: "home", label: "Home" },
   { id: "projects", label: "Projects" },
   { id: "about", label: "About" },
+  { id: "services", label: "Services" },
   { id: "contact", label: "Contact" },
 ];
 
@@ -24,7 +25,7 @@ export const Navbar: React.FC = () => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
 
-      const sections = ["home", "about", "projects", "contact"];
+      const sections = ["home", "projects", "about", "services", "contact"];
       for (const section of sections) {
         const element = document.getElementById(section);
         if (element) {
@@ -58,8 +59,8 @@ export const Navbar: React.FC = () => {
       className={`fixed top-0 w-full z-50 transition-all duration-300 border-b ${
         isScrolled
           ? isDark
-            ? "bg-gray-900/80 backdrop-blur-xl border-gray-800/50 shadow-lg shadow-black/10"
-            : "bg-white/80 backdrop-blur-xl border-gray-200/50 shadow-lg shadow-gray-200/30"
+            ? "bg-slate-900/80 backdrop-blur-xl border-slate-800/50 shadow-lg shadow-black/10"
+            : "bg-white/80 backdrop-blur-xl border-slate-200/50 shadow-lg shadow-slate-200/30"
           : "bg-transparent border-transparent"
       }`}
       initial={{ y: -100 }}
@@ -79,7 +80,10 @@ export const Navbar: React.FC = () => {
             >
               <img
                 src={"/logo.webp"}
-                alt="Mohamed Samy"
+                alt="Mohamed Samy logo"
+                width={56}
+                height={56}
+                decoding="async"
                 className="w-14 h-14"
               />
             </ScrollLink>
@@ -91,8 +95,8 @@ export const Navbar: React.FC = () => {
               className={`flex items-center gap-1 p-1 rounded-full ${
                 isScrolled
                   ? isDark
-                    ? "bg-gray-800/50"
-                    : "bg-gray-100/50"
+                    ? "bg-slate-800/50"
+                    : "bg-slate-100/50"
                   : ""
               }`}
             >
@@ -110,8 +114,8 @@ export const Navbar: React.FC = () => {
                         ? "text-white"
                         : "text-white"
                       : isDark
-                      ? "text-gray-400 hover:text-white"
-                      : "text-gray-600 hover:text-gray-900"
+                      ? "text-slate-400 hover:text-white"
+                      : "text-slate-600 hover:text-slate-900"
                   }`}
                   onSetActive={() => setActiveSection(item.id)}
                 >
@@ -120,8 +124,8 @@ export const Navbar: React.FC = () => {
                       layoutId="nav-pill"
                       className={`absolute inset-0 rounded-full ${
                         isDark
-                          ? "bg-indigo-600"
-                          : "bg-indigo-600"
+                          ? "bg-blue-600"
+                          : "bg-blue-600"
                       }`}
                       transition={{
                         type: "spring",
@@ -143,8 +147,8 @@ export const Navbar: React.FC = () => {
           <button
             className={`md:hidden p-2 rounded-xl transition-colors cursor-pointer ${
               isDark
-                ? "text-gray-300 hover:bg-gray-800"
-                : "text-gray-700 hover:bg-gray-100"
+                ? "text-slate-300 hover:bg-slate-800"
+                : "text-slate-700 hover:bg-slate-100"
             }`}
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle menu"
@@ -178,8 +182,8 @@ export const Navbar: React.FC = () => {
                 transition={{ duration: 0.25 }}
                 className={`md:hidden absolute left-4 right-4 top-[76px] rounded-2xl border z-50 overflow-hidden shadow-2xl ${
                   isDark
-                    ? "bg-gray-900/95 border-gray-700/50 shadow-black/30 backdrop-blur-xl"
-                    : "bg-white/95 border-gray-200/50 shadow-gray-300/30 backdrop-blur-xl"
+                    ? "bg-slate-900/95 border-slate-700/50 shadow-black/30 backdrop-blur-xl"
+                    : "bg-white/95 border-slate-200/50 shadow-slate-300/30 backdrop-blur-xl"
                 }`}
               >
                 <div className="py-3 px-3 space-y-1">
@@ -198,11 +202,11 @@ export const Navbar: React.FC = () => {
                         className={`flex items-center justify-between px-4 py-3 text-base font-semibold rounded-xl transition-all duration-200 cursor-pointer ${
                           activeSection === item.id
                             ? isDark
-                              ? "bg-indigo-600 text-white"
-                              : "bg-indigo-600 text-white"
+                              ? "bg-blue-600 text-white"
+                              : "bg-blue-600 text-white"
                             : isDark
-                            ? "text-gray-300 hover:bg-gray-800/60"
-                            : "text-gray-700 hover:bg-gray-100"
+                            ? "text-slate-300 hover:bg-slate-800/60"
+                            : "text-slate-700 hover:bg-slate-100"
                         }`}
                         onClick={() => setMobileMenuOpen(false)}
                       >
@@ -222,12 +226,12 @@ export const Navbar: React.FC = () => {
                 {/* Divider + Theme Toggle inside drawer */}
                 <div
                   className={`px-4 py-3 border-t flex items-center justify-between ${
-                    isDark ? "border-gray-800" : "border-gray-100"
+                    isDark ? "border-slate-800" : "border-slate-100"
                   }`}
                 >
                   <span
                     className={`text-sm font-medium ${
-                      isDark ? "text-gray-500" : "text-gray-400"
+                      isDark ? "text-slate-500" : "text-slate-400"
                     }`}
                   >
                     Appearance

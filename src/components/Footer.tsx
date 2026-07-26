@@ -7,6 +7,7 @@ const navLinks = [
   { id: "home", label: "Home" },
   { id: "projects", label: "Projects" },
   { id: "about", label: "About" },
+  { id: "services", label: "Services" },
   { id: "contact", label: "Contact" },
 ];
 
@@ -18,7 +19,7 @@ const socialLinks = [
   },
   {
     label: "LinkedIn",
-    href: "https://www.linkedin.com/in/mohamedsamy911/",
+    href: "https://www.linkedin.com/in/mohamed-samy-ba0107141/",
     icon: Linkedin,
   },
   {
@@ -36,15 +37,15 @@ const Footer: React.FC = () => {
   return (
     <footer
       className={`relative overflow-hidden ${
-        isDark ? "bg-gray-900" : "bg-gray-50"
+        isDark ? "bg-slate-900" : "bg-slate-50"
       }`}
     >
       {/* Top divider line */}
       <div
         className={`h-px ${
           isDark
-            ? "bg-gradient-to-r from-transparent via-gray-700 to-transparent"
-            : "bg-gradient-to-r from-transparent via-gray-300 to-transparent"
+            ? "bg-gradient-to-r from-transparent via-slate-700 to-transparent"
+            : "bg-gradient-to-r from-transparent via-slate-300 to-transparent"
         }`}
       />
 
@@ -61,13 +62,17 @@ const Footer: React.FC = () => {
             >
               <img
                 src="/logo.webp"
-                alt="Mohamed Samy"
+                alt="Mohamed Samy logo"
+                width={48}
+                height={48}
+                loading="lazy"
+                decoding="async"
                 className="w-12 h-12 mx-auto md:mx-0 mb-3"
               />
             </ScrollLink>
             <p
               className={`text-sm leading-relaxed ${
-                isDark ? "text-gray-400" : "text-gray-500"
+                isDark ? "text-slate-400" : "text-slate-500"
               }`}
             >
               Full Stack Engineer building scalable web apps with React, Node.js
@@ -79,7 +84,7 @@ const Footer: React.FC = () => {
           <div className="flex flex-col items-center md:items-start gap-2">
             <h4
               className={`text-xs font-semibold uppercase tracking-widest mb-2 ${
-                isDark ? "text-gray-500" : "text-gray-400"
+                isDark ? "text-slate-500" : "text-slate-400"
               }`}
             >
               Quick Links
@@ -93,8 +98,8 @@ const Footer: React.FC = () => {
                 offset={-80}
                 className={`text-sm cursor-pointer transition-colors duration-200 ${
                   isDark
-                    ? "text-gray-400 hover:text-indigo-400"
-                    : "text-gray-500 hover:text-indigo-600"
+                    ? "text-slate-400 hover:text-blue-400"
+                    : "text-slate-500 hover:text-blue-600"
                 }`}
               >
                 {link.label}
@@ -106,7 +111,7 @@ const Footer: React.FC = () => {
           <div className="flex flex-col items-center md:items-start gap-3">
             <h4
               className={`text-xs font-semibold uppercase tracking-widest mb-2 ${
-                isDark ? "text-gray-500" : "text-gray-400"
+                isDark ? "text-slate-500" : "text-slate-400"
               }`}
             >
               Connect
@@ -121,8 +126,8 @@ const Footer: React.FC = () => {
                   aria-label={social.label}
                   className={`p-2.5 rounded-xl transition-all duration-200 ${
                     isDark
-                      ? "bg-gray-800 text-gray-400 hover:bg-indigo-600 hover:text-white"
-                      : "bg-gray-100 text-gray-500 hover:bg-indigo-600 hover:text-white"
+                      ? "bg-slate-800 text-slate-400 hover:bg-blue-600 hover:text-white"
+                      : "bg-slate-100 text-slate-500 hover:bg-blue-600 hover:text-white"
                   }`}
                 >
                   <social.icon className="w-5 h-5" />
@@ -136,8 +141,8 @@ const Footer: React.FC = () => {
         <div
           className={`h-px mb-6 ${
             isDark
-              ? "bg-gradient-to-r from-transparent via-gray-800 to-transparent"
-              : "bg-gradient-to-r from-transparent via-gray-200 to-transparent"
+              ? "bg-gradient-to-r from-transparent via-slate-800 to-transparent"
+              : "bg-gradient-to-r from-transparent via-slate-200 to-transparent"
           }`}
         />
 
@@ -145,7 +150,7 @@ const Footer: React.FC = () => {
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           <p
             className={`text-sm flex items-center gap-1.5 ${
-              isDark ? "text-gray-500" : "text-gray-400"
+              isDark ? "text-slate-500" : "text-slate-400"
             }`}
           >
             © {year} Mohamed Samy. Made with ❤️ All rights reserved.
@@ -158,8 +163,8 @@ const Footer: React.FC = () => {
               duration={800}
               className={`flex items-center gap-2 text-sm font-medium cursor-pointer px-4 py-2 rounded-full transition-all duration-200 ${
                 isDark
-                  ? "text-gray-400 hover:text-white bg-gray-800 hover:bg-gray-700"
-                  : "text-gray-500 hover:text-gray-900 bg-gray-100 hover:bg-gray-200"
+                  ? "text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700"
+                  : "text-slate-500 hover:text-slate-900 bg-slate-100 hover:bg-slate-200"
               }`}
             >
               <ArrowUp className="w-4 h-4" />

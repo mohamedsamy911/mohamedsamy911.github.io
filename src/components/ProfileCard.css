@@ -2,7 +2,7 @@
   --pc-background-color: #ffffffe6;
   --pc-text-primary: #000000c1;
   --pc-text-secondary: #3e3e3e;
-  --background-image: linear-gradient(to bottom, #000, #6f6fbe);
+  --background-image: linear-gradient(to bottom, #000, #3b82f6);
   --pointer-x: 50%;
   --pointer-y: 50%;
   --pointer-from-center: 0;
@@ -36,7 +36,7 @@
   --pc-background-color: #000000e6;
   --pc-text-primary: #ffffffe6;
   --pc-text-secondary: #aaa;
-  --background-image: linear-gradient(to bottom, #fff, #6f6fbe);
+  --background-image: linear-gradient(to bottom, #fff, #3b82f6);
   --pointer-x: 50%;
   --pointer-y: 50%;
   --pointer-from-center: 0;

@@ -1,0 +1,17 @@
+{
+  "name": "Mohamed Samy — Full Stack Software Engineer",
+  "short_name": "Mohamed Samy",
+  "description": "Portfolio of Mohamed Samy, a Full Stack Software Engineer specializing in React.js, Node.js, NestJS, and DevOps.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#2563EB",
+  "icons": [
+    {
+      "src": "/logo.webp",
+      "sizes": "500x500",
+      "type": "image/webp",
+      "purpose": "any maskable"
+    }
+  ]
+}
