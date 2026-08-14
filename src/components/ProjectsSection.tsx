@@ -25,6 +25,12 @@ const ProjectsSection: React.FC = () => (
                 <span className="text-accent">
                   {String(i + 1).padStart(2, "0")}
                 </span>
+                {/* The index and year stack on desktop, but sit inline on
+                    mobile, where they ran together as "012026" without a
+                    separator. Matches the "01 / label" idiom in Section.tsx. */}
+                <span className="mx-2 text-rule-strong md:hidden" aria-hidden="true">
+                  /
+                </span>
                 <span className="md:mt-1 md:block">{project.period}</span>
               </p>
 
