@@ -1,92 +1,57 @@
 import { ArrowUpRight } from "lucide-react";
-import { clientWork, projects } from "../constants";
+import { clientSystems, personalProjects } from "../constants";
 import { Reveal, Section, SectionHeader } from "./Section";
 
+/**
+ * Selected work, ordered by weight rather than by what happens to be linkable.
+ *
+ * The public-sector and utility systems lead: they are the largest and by far
+ * the rarest work here. The personal projects that used to occupy this space
+ * are a compact index underneath, since they are smaller and, apart from the
+ * Design Lab, cannot be inspected anyway.
+ */
 const ProjectsSection: React.FC = () => (
   <Section id="projects" labelledBy="projects-title">
     <SectionHeader
       index="01"
       label="Selected work"
       titleId="projects-title"
-      title="Things I have built and shipped"
-      lede="Three systems in detail, then the client work I delivered at Penta-b and Edge-Pro. Most of it is client-owned and not public."
+      title="Systems people depend on"
+      lede="Most of what I have built runs inside governments and utilities: licensing, water and wastewater, asset tracking, public portals. It is client-owned, so none of it is linkable, which is the trade for working on things at that scale."
     />
 
     <ol className="mt-14 md:mt-16">
-      {projects.map((project, i) => (
-        <li key={project.title}>
-          <Reveal delay={i * 0.06}>
-            <article
-              className="grid gap-x-10 gap-y-5 border-t border-rule py-10 md:grid-cols-[9rem_1fr] md:py-12"
-              itemScope
-              itemType="https://schema.org/SoftwareSourceCode"
-            >
-              <p className="font-mono text-xs uppercase tracking-[0.16em] text-ink-faint md:pt-2">
-                <span className="text-accent">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                {/* The index and year stack on desktop, but sit inline on
-                    mobile, where they ran together as "012026" without a
-                    separator. Matches the "01 / label" idiom in Section.tsx. */}
-                <span className="mx-2 text-rule-strong md:hidden" aria-hidden="true">
-                  /
-                </span>
-                <span className="md:mt-1 md:block">{project.period}</span>
+      {clientSystems.map((system, i) => (
+        <li key={`${system.title}-${system.client}`}>
+          <Reveal delay={Math.min(i, 3) * 0.05}>
+            <article className="grid gap-x-10 gap-y-5 border-t border-rule py-10 md:grid-cols-[9rem_1fr] md:py-12">
+              <p className="font-mono text-xs uppercase tracking-[0.16em] text-accent md:pt-2">
+                {String(i + 1).padStart(2, "0")}
               </p>
 
               <div>
-                <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
-                  <h3 className="text-2xl md:text-3xl" itemProp="name">
-                    {project.title}
-                  </h3>
-                  <span className="font-mono text-[0.7rem] uppercase tracking-[0.16em] text-ink-faint">
-                    {project.category}
-                  </span>
-                </div>
-
-                <p
-                  className="mt-4 max-w-[64ch] leading-relaxed text-ink-muted"
-                  itemProp="description"
-                >
-                  {project.summary}
-                </p>
-                <p className="mt-3 max-w-[64ch] text-sm leading-relaxed text-ink-muted">
-                  {project.detail}
+                <h3 className="text-2xl md:text-3xl">{system.title}</h3>
+                <p className="mt-2 font-mono text-xs uppercase tracking-[0.16em] text-ink-faint">
+                  {system.client}
                 </p>
 
-                {project.outcome && (
+                <p className="mt-5 max-w-[64ch] leading-relaxed text-ink-muted">
+                  {system.summary}
+                </p>
+
+                {system.outcome && (
                   <p className="mt-5 border-l-2 border-accent pl-4 text-sm text-ink">
-                    {project.outcome}
+                    {system.outcome}
                   </p>
                 )}
 
                 <ul className="mt-6 flex flex-wrap gap-x-4 gap-y-2">
-                  {project.stack.map((tech) => (
-                    <li
-                      key={tech}
-                      className="font-mono text-xs text-ink-faint"
-                      itemProp="programmingLanguage"
-                    >
+                  {system.stack.map((tech) => (
+                    <li key={tech} className="font-mono text-xs text-ink-faint">
                       {tech}
                     </li>
                   ))}
                 </ul>
-
-                {project.repo && (
-                  <a
-                    href={project.repo}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group mt-7 inline-flex items-center gap-2 border-b border-rule-strong pb-1 text-sm font-medium text-ink transition-colors hover:border-accent hover:text-accent"
-                  >
-                    View source
-                    <ArrowUpRight
-                      className="h-4 w-4 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-                      aria-hidden="true"
-                    />
-                    <span className="sr-only"> for {project.title}</span>
-                  </a>
-                )}
               </div>
             </article>
           </Reveal>
@@ -94,21 +59,36 @@ const ProjectsSection: React.FC = () => (
       ))}
     </ol>
 
-    {/* Client work: real, substantial, and not linkable, so it is listed as
-        an index rather than padded out into portfolio cards. */}
     <Reveal>
-      <div className="grid gap-x-10 gap-y-6 border-t border-rule pt-10 md:grid-cols-[9rem_1fr]">
+      <div className="grid gap-x-10 gap-y-8 border-t border-rule pt-10 md:grid-cols-[9rem_1fr]">
         <h3 className="font-mono text-xs uppercase tracking-[0.16em] text-ink-faint md:pt-1">
-          Also shipped
+          Personal
         </h3>
-        <ul className="grid gap-x-10 gap-y-6 sm:grid-cols-2">
-          {clientWork.map((item) => (
-            <li key={`${item.title}-${item.client}`}>
-              <p className="text-sm font-medium text-ink">{item.title}</p>
-              <p className="mt-1 text-sm text-ink-muted">{item.client}</p>
-              <p className="mt-1.5 font-mono text-xs text-ink-faint">
-                {item.stack}
+        <ul className="grid gap-x-10 gap-y-8 sm:grid-cols-2">
+          {personalProjects.map((project) => (
+            <li key={project.title}>
+              <h4 className="text-base text-ink">{project.title}</h4>
+              <p className="mt-1.5 max-w-[46ch] text-sm leading-relaxed text-ink-muted">
+                {project.summary}
               </p>
+              <p className="mt-2 font-mono text-xs text-ink-faint">
+                {project.stack}
+              </p>
+              {project.repo && (
+                <a
+                  href={project.repo}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group mt-3 inline-flex items-center gap-1.5 border-b border-rule-strong pb-0.5 text-sm text-ink transition-colors hover:border-accent hover:text-accent"
+                >
+                  View source
+                  <ArrowUpRight
+                    className="h-3.5 w-3.5 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                    aria-hidden="true"
+                  />
+                  <span className="sr-only"> for {project.title}</span>
+                </a>
+              )}
             </li>
           ))}
         </ul>

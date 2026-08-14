@@ -21,98 +21,106 @@ export const PROFILE = {
   linkedin: "https://www.linkedin.com/in/mohamed-samy-ba0107141/",
 };
 
-export type Project = {
+/** Systems delivered for clients and employers. These lead the section: they
+ *  are the largest, and the rarest, work in the portfolio. Not linkable, since
+ *  they are client-owned. Content is drawn from the resume; expand any entry
+ *  with the detail you are free to share. */
+export type ClientSystem = {
   title: string;
-  category: string;
-  period: string;
+  client: string;
   summary: string;
-  detail: string;
   stack: string[];
   outcome?: string;
-  /** Only set where a genuinely public, inspectable repository exists.
-   *  Left unset means no link is rendered at all. The previous build showed a
-   *  "Source" and a "Demo" button that both pointed at the same profile page. */
-  repo?: string;
 };
 
-export const projects: Project[] = [
+export const clientSystems: ClientSystem[] = [
   {
-    title: "Design Lab",
-    category: "AI engineering",
-    period: "2026",
+    title: "Water and wastewater resource management",
+    client: "Cairo, Giza and Alexandria Governorates",
     summary:
-      "The system designer running in the Lab section of this site. A plain-English brief goes in; a checked service split, domain model and HTTP surface come out.",
-    detail:
-      "The model is constrained to a typed graph with a response schema rather than asked for a document. The graph is checked for referential integrity, gets one repair pass with the errors fed back if it fails, and every artefact on screen, including the OpenAPI file, is compiled from it by deterministic TypeScript. The key sits in a Cloudflare Worker behind a rate limit and a daily spend cap.",
-    stack: ["TypeScript", "React", "Gemini API", "Cloudflare Workers"],
-    outcome: "Compiler, validator and layout covered by 44 offline tests",
-    repo: `${PROFILE.github}/mohamedsamy911.github.io`,
+      "A resource management application for water and wastewater operations, running across three governorates. I led the design and the deployment.",
+    stack: ["React", "Java", "Camunda BPM", "Docker"],
   },
   {
-    title: "Allocation Management",
-    category: "Full stack",
-    period: "2023",
+    title: "Licensing and public complaint workflows",
+    client: "Alexandria Governorate",
     summary:
-      "A resource and project allocation system for planning teams, with a dashboard for assigning people to work and tracking capacity.",
-    detail:
-      "Typed React front end over a NestJS API, containerised for deployment. Allocation state is normalised in PostgreSQL so capacity conflicts are caught at write time rather than surfaced later in reporting.",
-    stack: ["React", "TypeScript", "NestJS", "PostgreSQL", "Docker"],
+      "Camunda-modelled processes for licence applications and public complaints, replacing manual routing between departments. The routing rules are policy, so they live in the process model rather than in application code.",
+    stack: ["Camunda BPM", "Java", "PostgreSQL", "Docker"],
+    outcome: "Cut manual processing effort by around 50%",
   },
   {
-    title: "Hospital Management System",
-    category: "Backend",
-    period: "2023",
+    title: "Smart asset management, GIS and IoT",
+    client: "Emaar Egypt City and Olympic City",
     summary:
-      "Backend for a hospital operations platform: scheduling, records and ward state, with live updates to every connected client.",
-    detail:
-      "Role-based authentication across clinical and administrative users, WebSocket channels for real-time ward and appointment events, and Redis in front of the read-heavy lookup paths.",
-    stack: ["NestJS", "PostgreSQL", "Redis", "WebSockets", "Docker"],
-    outcome: "Cached lookups cut API response times by ~40%",
-  },
-  {
-    title: "E-commerce Platform",
-    category: "Full stack",
-    period: "2022",
-    summary:
-      "A storefront and admin back office with payment integration and role-based access for staff and customers.",
-    detail:
-      "Next.js rendering the catalogue and checkout, PostgreSQL for orders and inventory, with an admin surface gated behind role checks rather than a separate application.",
-    stack: ["Next.js", "Node.js", "Express", "PostgreSQL", "Docker"],
-  },
-];
-
-/** Client and employer work, from the résumé. Not linkable, so it is listed
- *  as a compact index rather than dressed up as a portfolio card. */
-export const clientWork = [
-  {
-    title: "Water & wastewater resource management",
-    client: "Cairo, Giza & Alexandria Governorates",
-    stack: "React · Java · Camunda BPM · Docker",
+      "Asset tracking for two developments, integrating GIS and IoT platforms behind REST services, with automated flows between the systems that feed them.",
+    stack: ["React", "Java", "NestJS", "n8n", "Docker Swarm", "NGINX"],
   },
   {
     title: "Geo-enabled e-services portal",
     client: "Ministry of Tourism, Oman",
-    stack: "React · PostGIS · Docker Swarm",
+    summary:
+      "Geo-aware features for the ministry's public tourism portal, with PostGIS answering the spatial queries and the services deployed on Docker Swarm.",
+    stack: ["React", "PostGIS", "Docker Swarm"],
   },
   {
     title: "Crime-pattern analytics dashboards",
     client: "Ministry of Interior, Egypt",
-    stack: "React · Apache Superset · NGINX",
+    summary:
+      "Interactive dashboards with geo-analytics for visualising crime patterns across regions, served behind NGINX.",
+    stack: ["React", "Apache Superset", "NGINX"],
   },
   {
-    title: "Licensing & public complaint workflows",
-    client: "Alexandria Governorate",
-    stack: "Camunda BPM · Java · PostgreSQL",
+    title: "Internal process automation",
+    client: "Penta-b",
+    summary:
+      "Full-stack tools that took repetitive internal tasks off the team, from request intake through to completion.",
+    stack: ["React", "NestJS", "Docker"],
+    outcome: "Optimised the affected processes by over 30%",
+  },
+];
+
+/** Things built outside client work. A compact index: they are smaller than the
+ *  systems above and, apart from the Design Lab, not inspectable. */
+export type PersonalProject = {
+  title: string;
+  summary: string;
+  stack: string;
+  /** Only where a genuinely public repository exists. */
+  repo?: string;
+};
+
+export const personalProjects: PersonalProject[] = [
+  {
+    title: "Design Lab",
+    summary:
+      "The system designer in section 02 of this site. Schema-constrained generation, validated and compiled by hand-written TypeScript.",
+    stack: "TypeScript · React · Gemini API · Cloudflare Workers",
+    repo: `${PROFILE.github}/mohamedsamy911.github.io`,
   },
   {
-    title: "Smart asset management, GIS + IoT",
-    client: "Emaar Egypt City",
-    stack: "React · Java · NestJS · n8n · NGINX",
+    title: "Hospital Management System",
+    summary:
+      "Backend for hospital operations: role-based access, real-time ward events over WebSockets, Redis in front of the read-heavy paths.",
+    stack: "NestJS · PostgreSQL · Redis · WebSockets",
   },
   {
-    title: "Smart asset management, GIS + IoT",
-    client: "Olympic City",
-    stack: "React · Java · Docker Swarm · NGINX",
+    title: "Allocation Management",
+    summary:
+      "Resource and project allocation with capacity conflicts caught at write time rather than surfaced later in reporting.",
+    stack: "React · TypeScript · NestJS · PostgreSQL",
+  },
+  {
+    title: "E-commerce Platform",
+    summary:
+      "Storefront and admin back office with payment integration and role-gated staff access.",
+    stack: "Next.js · Node.js · Express · PostgreSQL",
+  },
+  {
+    title: "Point-of-sale system",
+    summary:
+      "Desktop POS for a cafeteria, built on React Electron over a NestJS API.",
+    stack: "React Electron · NestJS · PostgreSQL",
   },
 ];
 

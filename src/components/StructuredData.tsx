@@ -1,4 +1,4 @@
-import { projects, services } from "../constants";
+import { clientSystems, personalProjects, services } from "../constants";
 
 /**
  * Emits JSON-LD for the dynamic, data-driven content (projects + services).
@@ -14,17 +14,25 @@ const StructuredData: React.FC = () => {
       "@type": "ItemList",
       "@id": `${SITE}/#projects`,
       name: "Projects by Mohamed Samy",
-      itemListElement: projects.map((p, i) => ({
-        "@type": "ListItem",
-        position: i + 1,
-        item: {
-          "@type": "SoftwareSourceCode",
+      itemListElement: [
+        // Client systems first, matching the on-page hierarchy.
+        ...clientSystems.map((p) => ({
+          "@type": "SoftwareSourceCode" as const,
+          name: p.title,
+          description: `${p.summary} Delivered for ${p.client}.`,
+          keywords: p.stack.join(", "),
+        })),
+        ...personalProjects.map((p) => ({
+          "@type": "SoftwareSourceCode" as const,
           name: p.title,
           description: p.summary,
           ...(p.repo ? { codeRepository: p.repo, url: p.repo } : {}),
-          keywords: p.stack.join(", "),
-          author: { "@id": `${SITE}/#person` },
-        },
+          keywords: p.stack.split(" · ").join(", "),
+        })),
+      ].map((item, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        item: { ...item, author: { "@id": `${SITE}/#person` } },
       })),
     },
     {

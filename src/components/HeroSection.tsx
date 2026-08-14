@@ -83,14 +83,18 @@ const HeroSection: React.FC = () => {
 
           {/* Plain, framed portrait. No tilt, no glare, no fake status dot. */}
           <motion.div {...rise(0.24)} className="order-first md:order-last">
+            {/* Pre-cropped and pre-desaturated at 2x display size by
+                scripts/generate_brand_assets.mjs. The full-size source was the
+                measured LCP element on mobile: 1.35MP decoded into a 224x280
+                slot, with a grayscale filter over the whole bitmap. */}
             <img
-              src="/me.webp"
+              src="/me-hero.webp"
               alt={`${PROFILE.name}, ${PROFILE.role}`}
               width={224}
               height={280}
               fetchPriority="high"
               decoding="async"
-              className="h-[280px] w-[224px] border border-rule object-cover object-top grayscale"
+              className="h-[280px] w-[224px] border border-rule object-cover object-top"
             />
           </motion.div>
         </div>
