@@ -1,607 +1,141 @@
-import { motion, useInView } from "framer-motion";
-import React, { useEffect, useRef, useState, type JSX } from "react";
-import { RESUME_CONTENT } from "../constants";
+import { ArrowDown } from "lucide-react";
 import resumePdfPath from "../assets/Mohamed_Samy_Resume.pdf";
-import { useTheme } from "../context/ThemeContext";
-import {
-  Code,
-  Cable,
-  Database,
-  Link,
-  MessageSquare,
-  Puzzle,
-  Server,
-  Terminal,
-  Code2,
-  Container,
-  Network,
-  GitBranch,
-  Clock,
-  Github,
-  BadgeInfo,
-  Briefcase,
-  GraduationCap,
-  MapPin,
-  Download,
-  TrendingUp,
-  FolderKanban,
-  CalendarDays,
-  Award,
-} from "lucide-react";
+import { education, experienceTimeline, facts, skillGroups } from "../constants";
+import { Reveal, Section, SectionHeader } from "./Section";
 
-/* ─── Data ─────────────────────────────────────────────────── */
+/** A labelled block in the section's left gutter, so the whole page keeps
+ *  one alignment rhythm instead of alternating centred headings. */
+const Block: React.FC<{ label: string; children: React.ReactNode }> = ({
+  label,
+  children,
+}) => (
+  <div className="grid gap-x-10 gap-y-5 border-t border-rule pt-10 md:grid-cols-[9rem_1fr]">
+    <h3 className="font-mono text-xs uppercase tracking-[0.16em] text-ink-faint md:pt-1">
+      {label}
+    </h3>
+    <div>{children}</div>
+  </div>
+);
 
-const experienceTimeline = [
-  {
-    role: "Senior Software Engineer",
-    company: "Penta-b",
-    period: "Jan 2022 — Present",
-    location: "Egypt",
-    highlights: [
-      "Built and maintained scalable full-stack apps using React.js & NestJS/Java",
-      "Designed RESTful APIs & microservices, improving response times by 40%",
-      "Deployed services via Docker & Docker Swarm, reducing downtime by 30%",
-      "Automated workflows with Camunda BPM, cutting manual processing by 50%",
-    ],
-  },
-  {
-    role: "GIS Developer",
-    company: "Edge-Pro for Information Systems",
-    period: "Jul 2020 — Jan 2022",
-    location: "Egypt",
-    highlights: [
-      "Built web-based GIS dashboards with JavaScript, HTML & CSS",
-      "Developed form workflows & notification systems for enhanced communication",
-      "Conducted satellite image analysis & remote sensing for research projects",
-    ],
-  },
-  {
-    role: "Full-Stack Developer",
-    company: "Freelance",
-    period: "Ongoing",
-    location: "Remote",
-    highlights: [
-      "E-commerce app with role-based auth (Next.js, PostgreSQL)",
-      "Hospital Management System (React, NestJS, PostgreSQL, Redis)",
-      "POS system using React Electron, NestJS & PostgreSQL",
-    ],
-  },
-];
+const AboutSection: React.FC = () => (
+  <Section id="about" labelledBy="about-title">
+    <SectionHeader
+      index="03"
+      label="About"
+      titleId="about-title"
+      title="Five years of building for people who depend on it"
+      lede="I work across the whole stack, but the part I care most about is what happens after launch: whether the thing stays up, stays fast, and stays understandable to whoever inherits it. Most of my work has been public-sector and utility systems where that matters more than the front page."
+    />
 
-const education = [
-  {
-    degree: "Master of Business Administration",
-    school: "Brooklyn Business School",
-    period: "2024 — Present",
-  },
-  {
-    degree: "Full Stack Web Development Diploma",
-    school: "Route Academy",
-    period: "2021 — 2022",
-  },
-  {
-    degree: "B.Sc. Civil Engineering",
-    school: "German University in Cairo (GUC)",
-    period: "2013 — 2018",
-  },
-];
+    {/* Static figures. The previous build animated these counters on every
+        scroll-past, so the visible number was usually the wrong one. */}
+    <Reveal className="mt-14 md:mt-16">
+      <dl className="grid grid-cols-2 gap-x-10 gap-y-8 border-t border-rule pt-10 md:grid-cols-4">
+        {facts.map((f) => (
+          <div key={f.label}>
+            <dt className="sr-only">{f.label}</dt>
+            <dd>
+              <span className="block font-display text-4xl leading-none tracking-[-0.02em] text-ink md:text-5xl">
+                {f.value}
+              </span>
+              <span className="mt-3 block font-mono text-[0.7rem] uppercase leading-relaxed tracking-[0.14em] text-ink-faint">
+                {f.label}
+              </span>
+            </dd>
+          </div>
+        ))}
+      </dl>
+    </Reveal>
 
-const stats = [
-  { label: "Years Experience", value: 5, suffix: "+", icon: <CalendarDays className="w-5 h-5" /> },
-  { label: "Projects Delivered", value: 10, suffix: "+", icon: <FolderKanban className="w-5 h-5" /> },
-  { label: "Perf. Improvement", value: 40, suffix: "%", icon: <TrendingUp className="w-5 h-5" /> },
-  { label: "Downtime Reduced", value: 30, suffix: "%", icon: <Award className="w-5 h-5" /> },
-];
+    <Reveal className="mt-14">
+      <Block label="Experience">
+        <ol className="space-y-10">
+          {experienceTimeline.map((job) => (
+            <li key={`${job.company}-${job.role}`}>
+              <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
+                <h4 className="text-xl">{job.role}</h4>
+                <span className="font-mono text-xs text-ink-faint">
+                  {job.period}
+                </span>
+              </div>
+              <p className="mt-1.5 text-sm text-accent">
+                {job.company}
+                <span className="mx-2 text-rule-strong" aria-hidden="true">
+                  ·
+                </span>
+                <span className="text-ink-faint">{job.location}</span>
+              </p>
+              <ul className="mt-4 space-y-2">
+                {job.highlights.map((h) => (
+                  <li
+                    key={h}
+                    className="max-w-[64ch] text-sm leading-relaxed text-ink-muted before:mr-3 before:text-rule-strong before:content-['-']"
+                  >
+                    {h}
+                  </li>
+                ))}
+              </ul>
+            </li>
+          ))}
+        </ol>
+      </Block>
+    </Reveal>
 
-const experienceData = [
-  { technology: "React.js", years: 3 },
-  { technology: "Node.js", years: 5 },
-  { technology: "TypeScript", years: 3 },
-  { technology: "Docker", years: 4 },
-  { technology: "PostgreSQL", years: 5 },
-  { technology: "REST APIs", years: 5 },
-  { technology: "Microservices", years: 3 },
-  { technology: "Java (Spring Boot)", years: 2 },
-];
-
-const keySkills = [
-  "React.js",
-  "NestJS",
-  "TypeScript",
-  "Docker",
-  "NGINX",
-  "Linux",
-  "PostgreSQL",
-  "RESTful APIs",
-  "Microservices",
-  "CI/CD",
-  "Agile Methodologies",
-  "Problem Solving",
-  "Communication",
-  "Github",
-];
-
-const skillIconMap: Record<string, JSX.Element> = {
-  "React.js": <Code className="w-4 h-4" />,
-  NestJS: <Cable className="w-4 h-4" />,
-  TypeScript: <Code2 className="w-4 h-4" />,
-  Docker: <Container className="w-4 h-4" />,
-  NGINX: <Server className="w-4 h-4" />,
-  Linux: <Terminal className="w-4 h-4" />,
-  PostgreSQL: <Database className="w-4 h-4" />,
-  "RESTful APIs": <Link className="w-4 h-4" />,
-  Microservices: <Network className="w-4 h-4" />,
-  "CI/CD": <GitBranch className="w-4 h-4" />,
-  "Agile Methodologies": <Clock className="w-4 h-4" />,
-  "Problem Solving": <Puzzle className="w-4 h-4" />,
-  Communication: <MessageSquare className="w-4 h-4" />,
-  Github: <Github className="w-4 h-4" />,
-};
-
-/* ─── Animated Counter ─────────────────────────────────────── */
-
-const AnimatedCounter: React.FC<{
-  value: number;
-  suffix: string;
-  duration?: number;
-}> = ({ value, suffix, duration = 2 }) => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, amount: 0.5 });
-  const [count, setCount] = useState(0);
-
-  useEffect(() => {
-    if (!isInView) return;
-    let start = 0;
-    const step = value / (duration * 60); // ~60fps
-    const timer = setInterval(() => {
-      start += step;
-      if (start >= value) {
-        setCount(value);
-        clearInterval(timer);
-      } else {
-        setCount(Math.floor(start));
-      }
-    }, 1000 / 60);
-    return () => clearInterval(timer);
-  }, [isInView, value, duration]);
-
-  return (
-    <span ref={ref}>
-      {count}
-      {suffix}
-    </span>
-  );
-};
-
-/* ─── Section Tabs ─────────────────────────────────────────── */
-
-type Tab = "skills" | "experience" | "education";
-
-/* ─── Main Component ───────────────────────────────────────── */
-
-const AboutSection: React.FC = () => {
-  const { theme } = useTheme();
-  const cardRef = useRef(null);
-  const isInView = useInView(cardRef, { amount: 0.3 });
-  const [hasAnimated, setHasAnimated] = useState(false);
-  const [activeTab, setActiveTab] = useState<Tab>("skills");
-
-  useEffect(
-    () => (isInView ? setHasAnimated(true) : setHasAnimated(false)),
-    [isInView]
-  );
-
-  const professionalSummary =
-    /PROFESSIONAL SUMMARY:([\s\S]*?)TECHNICAL SKILLS:/i
-      .exec(RESUME_CONTENT)?.[1]
-      .trim();
-
-  const isDark = theme === "dark";
-
-  const tabButtonClass = (tab: Tab) =>
-    `px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 cursor-pointer ${
-      activeTab === tab
-        ? isDark
-          ? "bg-blue-600 text-white shadow-lg shadow-blue-500/30"
-          : "bg-blue-600 text-white shadow-lg shadow-blue-400/30"
-        : isDark
-        ? "text-slate-400 hover:text-white hover:bg-slate-800"
-        : "text-slate-500 hover:text-slate-900 hover:bg-slate-200"
-    }`;
-
-  return (
-    <section
-      id="about"
-      className={`w-full py-24 px-4 transition-colors duration-300 ${
-        isDark ? "bg-slate-900" : "bg-slate-100"
-      }`}
-      aria-label="About Mohamed Samy - Software Engineer Skills and Experience"
-    >
-      <div className="container mx-auto max-w-6xl">
-        {/* ── Header ──────────────────────────────────────── */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
-        >
-          <h2
-            className={`text-4xl md:text-6xl font-bold mb-6 ${
-              isDark ? "text-white" : "text-slate-900"
-            }`}
-          >
-            About{" "}
-            <span className="text-blue-600 dark:text-blue-400">Me</span>
-          </h2>
-          <p
-            className={`text-lg max-w-2xl mx-auto leading-relaxed ${
-              isDark ? "text-slate-400" : "text-slate-600"
-            }`}
-            itemProp="description"
-          >
-            {professionalSummary ||
-              "Results-driven Software Engineer with extensive experience in building scalable, secure web applications."}
-          </p>
-        </motion.div>
-
-        {/* ── Stats Row ───────────────────────────────────── */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          viewport={{ once: true }}
-          className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-16"
-        >
-          {stats.map((stat) => (
+    <Reveal className="mt-14">
+      <Block label="Toolkit">
+        <dl className="space-y-6">
+          {skillGroups.map((group) => (
             <div
-              key={stat.label}
-              className={`rounded-2xl p-6 text-center border backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 ${
-                isDark
-                  ? "bg-slate-800/60 border-slate-700/50 hover:border-blue-500/40"
-                  : "bg-white/80 border-slate-200/60 hover:border-blue-300 shadow-sm"
-              }`}
+              key={group.label}
+              className="grid gap-x-8 gap-y-2 sm:grid-cols-[7rem_1fr]"
             >
-              <div
-                className={`inline-flex items-center justify-center w-10 h-10 rounded-xl mb-3 ${
-                  isDark ? "bg-blue-500/10 text-blue-400" : "bg-blue-100 text-blue-600"
-                }`}
-              >
-                {stat.icon}
-              </div>
-              <div
-                className={`text-3xl md:text-4xl font-bold mb-1 ${
-                  isDark ? "text-white" : "text-slate-900"
-                }`}
-              >
-                <AnimatedCounter value={stat.value} suffix={stat.suffix} />
-              </div>
-              <div
-                className={`text-xs md:text-sm font-medium ${
-                  isDark ? "text-slate-400" : "text-slate-500"
-                }`}
-              >
-                {stat.label}
-              </div>
+              <dt className="text-sm text-ink-faint">{group.label}</dt>
+              <dd className="flex flex-wrap gap-x-4 gap-y-2">
+                {group.items.map((item) => (
+                  <span key={item} className="font-mono text-sm text-ink">
+                    {item}
+                  </span>
+                ))}
+              </dd>
             </div>
           ))}
-        </motion.div>
+        </dl>
+      </Block>
+    </Reveal>
 
-        {/* ── Two-Column Content ───────────────────────────── */}
-        <div className="grid lg:grid-cols-5 gap-10 items-start">
-          {/* LEFT — Tabs: Skills / Experience / Education */}
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="lg:col-span-3"
-          >
-            {/* Tab Buttons */}
-            <div className="flex gap-2 mb-8 flex-wrap">
-              <button className={tabButtonClass("skills")} onClick={() => setActiveTab("skills")}>
-                Technical Skills
-              </button>
-              <button className={tabButtonClass("experience")} onClick={() => setActiveTab("experience")}>
-                Experience
-              </button>
-              <button className={tabButtonClass("education")} onClick={() => setActiveTab("education")}>
-                Education
-              </button>
-            </div>
-
-            {/* Tab Content */}
-            <div className="min-h-[400px]">
-              {/* ── Skills Tab ─────────────────────────────── */}
-              {activeTab === "skills" && (
-                <motion.div
-                  key="skills"
-                  initial={{ opacity: 0, y: 15 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4 }}
-                >
-                  <motion.div
-                    initial="hidden"
-                    animate="visible"
-                    variants={{
-                      hidden: {},
-                      visible: { transition: { staggerChildren: 0.04 } },
-                    }}
-                    className="grid grid-cols-2 sm:grid-cols-3 gap-3"
-                  >
-                    {keySkills.map((skill) => (
-                      <motion.div
-                        key={skill}
-                        variants={{
-                          hidden: { opacity: 0, y: 10 },
-                          visible: { opacity: 1, y: 0 },
-                        }}
-                        className={`flex items-center px-4 py-2.5 rounded-xl border gap-2.5 text-sm font-medium 
-                        ${
-                          isDark
-                            ? "bg-blue-500/10 text-blue-200 border-blue-600/40 hover:bg-blue-600/20"
-                            : "bg-blue-50 text-blue-800 border-blue-200 hover:bg-blue-100"
-                        } transition-all duration-200 hover:-translate-y-0.5 cursor-default`}
-                      >
-                        {skillIconMap[skill] || <BadgeInfo className="w-4 h-4" />}
-                        {skill}
-                      </motion.div>
-                    ))}
-                  </motion.div>
-
-                  {/* Download Resume */}
-                  <motion.a
-                    href={resumePdfPath}
-                    download="Mohamed_Samy_Resume.pdf"
-                    whileHover={{ scale: 1.03 }}
-                    whileTap={{ scale: 0.97 }}
-                    className={`mt-8 inline-flex items-center justify-center px-6 py-3 text-base font-medium rounded-xl shadow-lg transition-all duration-300 gap-2
-                      ${
-                        isDark
-                          ? "bg-blue-600 text-white hover:bg-blue-500 hover:shadow-blue-500/30"
-                          : "bg-blue-600 text-white hover:bg-blue-500 hover:shadow-blue-400/40"
-                      }
-                    `}
-                  >
-                    <Download className="w-5 h-5" />
-                    Download Resume
-                  </motion.a>
-                </motion.div>
-              )}
-
-              {/* ── Experience Tab ─────────────────────────── */}
-              {activeTab === "experience" && (
-                <motion.div
-                  key="experience"
-                  initial={{ opacity: 0, y: 15 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4 }}
-                  className="relative"
-                >
-                  {/* Timeline Line */}
-                  <div
-                    className={`absolute left-[15px] top-2 bottom-2 w-0.5 ${
-                      isDark ? "bg-blue-500/20" : "bg-blue-200"
-                    }`}
-                  />
-
-                  <div className="space-y-8">
-                    {experienceTimeline.map((job, idx) => (
-                      <motion.div
-                        key={job.company}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.4, delay: idx * 0.1 }}
-                        className="relative pl-10"
-                      >
-                        {/* Timeline Dot */}
-                        <div
-                          className={`absolute left-[9px] top-1.5 w-3.5 h-3.5 rounded-full border-2 ${
-                            idx === 0
-                              ? isDark
-                                ? "bg-blue-500 border-blue-400 shadow-lg shadow-blue-500/40"
-                                : "bg-blue-600 border-blue-500 shadow-lg shadow-blue-400/40"
-                              : isDark
-                              ? "bg-slate-700 border-slate-600"
-                              : "bg-slate-300 border-slate-400"
-                          }`}
-                        />
-
-                        <div
-                          className={`rounded-2xl p-5 border transition-all duration-300 ${
-                            isDark
-                              ? "bg-slate-800/50 border-slate-700/50 hover:border-blue-500/30"
-                              : "bg-white border-slate-200 hover:border-blue-300 shadow-sm"
-                          }`}
-                        >
-                          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 mb-3">
-                            <h4
-                              className={`text-lg font-bold ${
-                                isDark ? "text-white" : "text-slate-900"
-                              }`}
-                            >
-                              {job.role}
-                            </h4>
-                            <span
-                              className={`text-xs font-medium px-3 py-1 rounded-full whitespace-nowrap ${
-                                isDark
-                                  ? "bg-blue-500/10 text-blue-300"
-                                  : "bg-blue-100 text-blue-700"
-                              }`}
-                            >
-                              {job.period}
-                            </span>
-                          </div>
-                          <div className="flex items-center gap-3 mb-3">
-                            <span
-                              className={`flex items-center gap-1.5 text-sm ${
-                                isDark ? "text-blue-400" : "text-blue-600"
-                              }`}
-                            >
-                              <Briefcase className="w-3.5 h-3.5" />
-                              {job.company}
-                            </span>
-                            <span
-                              className={`flex items-center gap-1 text-xs ${
-                                isDark ? "text-slate-500" : "text-slate-400"
-                              }`}
-                            >
-                              <MapPin className="w-3 h-3" />
-                              {job.location}
-                            </span>
-                          </div>
-                          <ul className="space-y-1.5">
-                            {job.highlights.map((h, i) => (
-                              <li
-                                key={i}
-                                className={`text-sm leading-relaxed flex gap-2 ${
-                                  isDark ? "text-slate-400" : "text-slate-600"
-                                }`}
-                              >
-                                <span className="text-blue-500 mt-1 shrink-0">▸</span>
-                                {h}
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      </motion.div>
-                    ))}
-                  </div>
-                </motion.div>
-              )}
-
-              {/* ── Education Tab ──────────────────────────── */}
-              {activeTab === "education" && (
-                <motion.div
-                  key="education"
-                  initial={{ opacity: 0, y: 15 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4 }}
-                  className="space-y-4"
-                >
-                  {education.map((edu, idx) => (
-                    <motion.div
-                      key={edu.school}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.4, delay: idx * 0.1 }}
-                      className={`rounded-2xl p-5 border flex gap-4 items-start transition-all duration-300 ${
-                        isDark
-                          ? "bg-slate-800/50 border-slate-700/50 hover:border-blue-500/30"
-                          : "bg-white border-slate-200 hover:border-blue-300 shadow-sm"
-                      }`}
-                    >
-                      <div
-                        className={`shrink-0 w-11 h-11 rounded-xl flex items-center justify-center ${
-                          isDark
-                            ? "bg-blue-500/10 text-blue-400"
-                            : "bg-blue-100 text-blue-600"
-                        }`}
-                      >
-                        <GraduationCap className="w-5 h-5" />
-                      </div>
-                      <div>
-                        <h4
-                          className={`text-base font-bold ${
-                            isDark ? "text-white" : "text-slate-900"
-                          }`}
-                        >
-                          {edu.degree}
-                        </h4>
-                        <p
-                          className={`text-sm ${
-                            isDark ? "text-blue-400" : "text-blue-600"
-                          }`}
-                        >
-                          {edu.school}
-                        </p>
-                        <p
-                          className={`text-xs mt-1 ${
-                            isDark ? "text-slate-500" : "text-slate-400"
-                          }`}
-                        >
-                          {edu.period}
-                        </p>
-                      </div>
-                    </motion.div>
-                  ))}
-                </motion.div>
-              )}
-            </div>
-          </motion.div>
-
-          {/* RIGHT — Skills Progress Card */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            viewport={{ once: true }}
-            className="lg:col-span-2"
-            ref={cardRef}
-          >
-            <div
-              className={`rounded-3xl p-7 shadow-xl border backdrop-blur-xl transition-all duration-300 sticky top-24
-              ${
-                isDark
-                  ? "bg-gradient-to-br from-blue-900/30 to-blue-600/10 border-blue-600/20"
-                  : "bg-gradient-to-br from-white to-blue-50 border-blue-200"
-              }`}
+    <Reveal className="mt-14">
+      <Block label="Education">
+        <ul className="space-y-6">
+          {education.map((edu) => (
+            <li
+              key={edu.school}
+              className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1"
             >
-              <h3
-                className={`text-2xl font-bold mb-6 tracking-tight ${
-                  isDark ? "text-white" : "text-slate-800"
-                }`}
-              >
-                Proficiency
-              </h3>
-              <div className="space-y-5">
-                {experienceData.map((item, idx) => (
-                  <div key={item.technology}>
-                    <div className="flex justify-between mb-1.5">
-                      <span
-                        className={`text-sm font-medium ${
-                          isDark ? "text-slate-300" : "text-slate-700"
-                        }`}
-                      >
-                        {item.technology}
-                      </span>
-                      <span
-                        className={`text-sm font-semibold ${
-                          isDark ? "text-blue-300" : "text-blue-600"
-                        }`}
-                      >
-                        {item.years}+ {item.years === 1 ? "year" : "years"}
-                      </span>
-                    </div>
-                    <div
-                      className={`w-full h-2 rounded-full overflow-hidden ${
-                        isDark ? "bg-slate-700" : "bg-slate-200"
-                      }`}
-                    >
-                      <motion.div
-                        initial={{ width: 0 }}
-                        animate={
-                          hasAnimated
-                            ? { width: `${(item.years / 5) * 100}%` }
-                            : { width: 0 }
-                        }
-                        transition={{ duration: 0.8, delay: idx * 0.08 }}
-                        className={`h-full rounded-full ${
-                          isDark
-                            ? "bg-gradient-to-r from-blue-500 to-sky-400"
-                            : "bg-gradient-to-r from-blue-500 to-blue-600"
-                        }`}
-                      />
-                    </div>
-                  </div>
-                ))}
+              <div>
+                <p className="text-base text-ink">{edu.degree}</p>
+                <p className="mt-1 text-sm text-ink-muted">{edu.school}</p>
               </div>
-            </div>
-          </motion.div>
-        </div>
-      </div>
-    </section>
-  );
-};
+              <span className="font-mono text-xs text-ink-faint">
+                {edu.period}
+              </span>
+            </li>
+          ))}
+        </ul>
+
+        <a
+          href={resumePdfPath}
+          download="Mohamed_Samy_Resume.pdf"
+          className="group mt-10 inline-flex items-center gap-2.5 border-b border-rule-strong pb-1 text-sm font-medium text-ink transition-colors hover:border-accent hover:text-accent"
+        >
+          Download full résumé
+          <ArrowDown
+            className="h-4 w-4 transition-transform duration-200 group-hover:translate-y-0.5"
+            aria-hidden="true"
+          />
+        </a>
+      </Block>
+    </Reveal>
+  </Section>
+);
 
 export default AboutSection;

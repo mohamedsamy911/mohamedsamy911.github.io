@@ -1,105 +1,43 @@
-import { motion } from "framer-motion";
 import { services } from "../constants";
-import { useTheme } from "../context/ThemeContext";
+import { Reveal, Section, SectionHeader } from "./Section";
 
-const ServicesSection: React.FC = () => {
-  const { theme } = useTheme();
-  const isDark = theme === "dark";
+const ServicesSection: React.FC = () => (
+  <Section id="services" labelledBy="services-title">
+    <SectionHeader
+      index="04"
+      label="Services"
+      titleId="services-title"
+      title="What I can take off your plate"
+      lede="Four things I do repeatedly and can be held to. The numbers are from systems currently in production, not projections."
+    />
 
-  return (
-    <section
-      id="services"
-      className={`w-full py-24 px-4 transition-colors duration-300 ${
-        isDark ? "bg-slate-900" : "bg-white"
-      }`}
-      aria-label="Services offered by Mohamed Samy"
-    >
-      <div className="container mx-auto max-w-6xl">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
-        >
-          <h2
-            className={`text-4xl md:text-6xl font-bold mb-4 ${
-              isDark ? "text-white" : "text-slate-900"
-            }`}
-          >
-            What I{" "}
-            <span className="text-blue-600 dark:text-blue-400">Do</span>
-          </h2>
-          <p
-            className={`text-lg max-w-2xl mx-auto ${
-              isDark ? "text-slate-400" : "text-slate-600"
-            }`}
-          >
-            From the first line of UI to the container it ships in — here's how I
-            can help.
-          </p>
-        </motion.div>
-
-        {/* Cards */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {services.map((service, index) => (
-            <motion.article
-              key={service.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              viewport={{ once: true }}
-              whileHover={{ y: -6 }}
-              className={`rounded-2xl p-6 border h-full flex flex-col transition-all duration-300 ${
-                isDark
-                  ? "bg-slate-800/50 border-slate-700/50 hover:border-blue-500/40"
-                  : "bg-slate-50 border-slate-200 hover:border-blue-300 hover:shadow-lg shadow-sm"
-              }`}
-            >
-              <div
-                className={`inline-flex items-center justify-center w-12 h-12 rounded-xl mb-4 ${
-                  isDark
-                    ? "bg-blue-500/10 text-blue-400"
-                    : "bg-blue-100 text-blue-600"
-                }`}
-              >
-                {service.icon}
-              </div>
-              <h3
-                className={`text-lg font-bold mb-2 ${
-                  isDark ? "text-white" : "text-slate-900"
-                }`}
-              >
-                {service.title}
-              </h3>
-              <p
-                className={`text-sm leading-relaxed mb-4 flex-1 ${
-                  isDark ? "text-slate-400" : "text-slate-600"
-                }`}
-              >
-                {service.description}
+    <ol className="mt-14 md:mt-16">
+      {services.map((service, i) => (
+        <li key={service.title}>
+          <Reveal delay={i * 0.05}>
+            <article className="grid gap-x-10 gap-y-4 border-t border-rule py-10 md:grid-cols-[9rem_1fr]">
+              <p className="font-mono text-xs uppercase tracking-[0.16em] text-accent md:pt-2">
+                {String(i + 1).padStart(2, "0")}
               </p>
-              <div className="flex flex-wrap gap-1.5">
-                {service.keywords.map((kw) => (
-                  <span
-                    key={kw}
-                    className={`text-xs font-medium px-2.5 py-1 rounded-lg ${
-                      isDark
-                        ? "bg-slate-700/50 text-slate-300"
-                        : "bg-white text-slate-600 border border-slate-200"
-                    }`}
-                  >
-                    {kw}
-                  </span>
-                ))}
+              <div>
+                <h3 className="text-xl md:text-2xl">{service.title}</h3>
+                <p className="mt-4 max-w-[64ch] leading-relaxed text-ink-muted">
+                  {service.description}
+                </p>
+                <ul className="mt-5 flex flex-wrap gap-x-4 gap-y-2">
+                  {service.keywords.map((kw) => (
+                    <li key={kw} className="font-mono text-xs text-ink-faint">
+                      {kw}
+                    </li>
+                  ))}
+                </ul>
               </div>
-            </motion.article>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
+            </article>
+          </Reveal>
+        </li>
+      ))}
+    </ol>
+  </Section>
+);
 
 export default ServicesSection;

@@ -2,7 +2,8 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/webp" href="/logo.webp" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="alternate icon" href="/favicon-32.png" sizes="32x32" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -24,7 +25,7 @@
     />
     <meta
       name="description"
-      content="Mohamed Samy is a professional Full Stack Software Engineer specializing in React.js, Node.js, NestJS, TypeScript, and DevOps. Based in Egypt, building scalable web applications and microservices."
+      content="Mohamed Samy is a Full Stack Software Engineer specializing in React.js, Node.js, NestJS, TypeScript, and DevOps. Based in Riyadh, Saudi Arabia, building scalable web applications and microservices."
     />
     <meta
       name="keywords"
@@ -87,12 +88,32 @@
     <link rel="canonical" href="https://mohamedsamy911.github.io/" />
 
     <!-- Theme Color -->
-    <meta name="theme-color" content="#2563EB" />
-    <meta name="msapplication-TileColor" content="#2563EB" />
+    <meta name="theme-color" content="#FAF7F2" />
+    <meta name="msapplication-TileColor" content="#FAF7F2" />
+
+    <!-- Apply the saved (or system) theme before first paint, so the page never
+         flashes the wrong palette and React's first render matches the DOM. -->
+    <script>
+      (function () {
+        try {
+          var saved = localStorage.getItem("theme");
+          var dark = saved
+            ? saved === "dark"
+            : window.matchMedia("(prefers-color-scheme: dark)").matches;
+          document.documentElement.classList.toggle("dark", dark);
+          if (dark) {
+            document
+              .querySelector('meta[name="theme-color"]')
+              .setAttribute("content", "#131211");
+          }
+        } catch (e) {
+          /* localStorage blocked; fall through to the light default */
+        }
+      })();
+    </script>
 
     <!-- Preload critical resources -->
     <link rel="preload" as="image" href="/me.webp" fetchpriority="high" />
-    <link rel="preload" as="image" href="/logo.webp" fetchpriority="high" />
 
     <!-- Structured Data -->
     <script type="application/ld+json">
@@ -152,7 +173,7 @@
             "@type": "WebSite",
             "@id": "https://mohamedsamy911.github.io/#website",
             "url": "https://mohamedsamy911.github.io/",
-            "name": "Mohamed Samy — Full Stack Software Engineer",
+            "name": "Mohamed Samy, Full Stack Software Engineer",
             "description": "Portfolio of Mohamed Samy, a Full Stack Software Engineer specializing in React.js, Node.js, NestJS, and DevOps.",
             "inLanguage": "en",
             "publisher": { "@id": "https://mohamedsamy911.github.io/#person" }

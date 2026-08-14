@@ -1,0 +1,25 @@
+name = "designlab"
+main = "src/index.ts"
+compatibility_date = "2025-11-01"
+
+# The model key is a secret, never a var:
+#   npx wrangler secret put GEMINI_API_KEY
+[vars]
+ALLOWED_ORIGINS = "https://mohamedsamy911.github.io,http://localhost:5173"
+# Both return valid schema-constrained JSON that passes referential validation,
+# so they were chosen on measured availability, not on version number. Across
+# this account: 3.6-flash 6 successes / 0 failures, 3.7-flash 2 / 5 with 503
+# "high demand". A 503 on the primary costs the reader a second sequential call,
+# so the reliable model leads. Re-check with scripts/probe_model.mjs before
+# swapping these back.
+MODEL = "gemini-3.6-flash"
+FALLBACK_MODEL = "gemini-3.7-flash"
+RATE_PER_HOUR = "8"
+DAILY_CAP = "300"
+
+# Backs both the proposal cache and the rate-limit counters.
+# Create it once, then paste the id here:
+#   npx wrangler kv namespace create CACHE
+[[kv_namespaces]]
+binding = "CACHE"
+id = "6eb09c443b3c487986e268b79c1aeb2e"

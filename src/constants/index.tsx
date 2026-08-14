@@ -1,174 +1,253 @@
-import {
-  Cable,
-  Code,
-  Code2,
-  Container,
-  Database,
-  Layers,
-  Network,
-  Workflow,
-  Zap,
-} from "lucide-react";
-import type { JSX } from "react";
-import hms from "../assets/hms.webp";
-import ras from "../assets/ras.webp";
-import ecommerce from "../assets/e-commerce.webp";
-
-// AI
-export const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
+// Design Lab. Only the Worker's public URL is client-side; the model key lives
+// as a Worker secret. Never reintroduce a VITE_-prefixed model key: everything
+// with that prefix is inlined verbatim into the public bundle.
+export const DESIGNLAB_ENDPOINT =
+  import.meta.env.VITE_DESIGNLAB_ENDPOINT || "";
 
 // EmailJS
 export const PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || "";
 export const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID || "";
 export const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || "";
 
-// Projects
-export const projects = [
+// Identity: single source of truth for contact details, schema and meta copy.
+export const PROFILE = {
+  name: "Mohamed Samy",
+  role: "Full Stack Engineer",
+  location: "Riyadh, Saudi Arabia",
+  email: "mohamedadel74@gmail.com",
+  phone: "+966 50 655 7963",
+  phoneHref: "tel:+966506557963",
+  github: "https://github.com/mohamedsamy911",
+  linkedin: "https://www.linkedin.com/in/mohamed-samy-ba0107141/",
+};
+
+export type Project = {
+  title: string;
+  category: string;
+  period: string;
+  summary: string;
+  detail: string;
+  stack: string[];
+  outcome?: string;
+  /** Only set where a genuinely public, inspectable repository exists.
+   *  Left unset means no link is rendered at all. The previous build showed a
+   *  "Source" and a "Demo" button that both pointed at the same profile page. */
+  repo?: string;
+};
+
+export const projects: Project[] = [
   {
-    title: "Allocation Management App",
-    description:
-      "A full-stack allocation system with a sleek dashboard to manage resources and projects efficiently.",
-    category: "Full Stack",
-    github: "https://github.com/mohamedsamy911",
-    tags: [
-      { label: "React", icon: <Code className="w-3.5 h-3.5" /> },
-      { label: "TypeScript", icon: <Code2 className="w-3.5 h-3.5" /> },
-      { label: "Tailwind CSS", icon: <Layers className="w-3.5 h-3.5" /> },
-      { label: "PostgreSQL", icon: <Database className="w-3.5 h-3.5" /> },
-      { label: "Docker", icon: <Container className="w-3.5 h-3.5" /> },
-      { label: "NestJS", icon: <Cable className="w-3.5 h-3.5" /> },
-    ],
-    pic: ras,
+    title: "Design Lab",
+    category: "AI engineering",
+    period: "2026",
+    summary:
+      "The system designer running in the Lab section of this site. A plain-English brief goes in; a checked service split, domain model and HTTP surface come out.",
+    detail:
+      "The model is constrained to a typed graph with a response schema rather than asked for a document. The graph is checked for referential integrity, gets one repair pass with the errors fed back if it fails, and every artefact on screen, including the OpenAPI file, is compiled from it by deterministic TypeScript. The key sits in a Cloudflare Worker behind a rate limit and a daily spend cap.",
+    stack: ["TypeScript", "React", "Gemini API", "Cloudflare Workers"],
+    outcome: "Compiler, validator and layout covered by 44 offline tests",
+    repo: `${PROFILE.github}/mohamedsamy911.github.io`,
   },
   {
-    title: "E-commerce Platform",
-    description:
-      "Full-stack e-commerce platform with secure payment integration and admin dashboard.",
-    category: "Full Stack",
-    github: "https://github.com/mohamedsamy911",
-    tags: [
-      { label: "Node.js", icon: <Code className="w-3.5 h-3.5" /> },
-      { label: "Next.js", icon: <Code2 className="w-3.5 h-3.5" /> },
-      { label: "Express.js", icon: <Cable className="w-3.5 h-3.5" /> },
-      { label: "PostgreSQL", icon: <Database className="w-3.5 h-3.5" /> },
-      { label: "Tailwind CSS", icon: <Layers className="w-3.5 h-3.5" /> },
-      { label: "Docker", icon: <Container className="w-3.5 h-3.5" /> },
-    ],
-    pic: ecommerce,
+    title: "Allocation Management",
+    category: "Full stack",
+    period: "2023",
+    summary:
+      "A resource and project allocation system for planning teams, with a dashboard for assigning people to work and tracking capacity.",
+    detail:
+      "Typed React front end over a NestJS API, containerised for deployment. Allocation state is normalised in PostgreSQL so capacity conflicts are caught at write time rather than surfaced later in reporting.",
+    stack: ["React", "TypeScript", "NestJS", "PostgreSQL", "Docker"],
   },
   {
     title: "Hospital Management System",
-    description:
-      "Complete backend system for hospital management with real-time WebSocket support, Redis caching, and role-based authentication.",
     category: "Backend",
-    github: "https://github.com/mohamedsamy911",
-    tags: [
-      { label: "Node.js", icon: <Code className="w-3.5 h-3.5" /> },
-      { label: "NestJS", icon: <Cable className="w-3.5 h-3.5" /> },
-      { label: "PostgreSQL", icon: <Database className="w-3.5 h-3.5" /> },
-      { label: "Docker", icon: <Container className="w-3.5 h-3.5" /> },
-      { label: "WebSockets", icon: <Zap className="w-3.5 h-3.5" /> },
-    ],
-    pic: hms,
+    period: "2023",
+    summary:
+      "Backend for a hospital operations platform: scheduling, records and ward state, with live updates to every connected client.",
+    detail:
+      "Role-based authentication across clinical and administrative users, WebSocket channels for real-time ward and appointment events, and Redis in front of the read-heavy lookup paths.",
+    stack: ["NestJS", "PostgreSQL", "Redis", "WebSockets", "Docker"],
+    outcome: "Cached lookups cut API response times by ~40%",
+  },
+  {
+    title: "E-commerce Platform",
+    category: "Full stack",
+    period: "2022",
+    summary:
+      "A storefront and admin back office with payment integration and role-based access for staff and customers.",
+    detail:
+      "Next.js rendering the catalogue and checkout, PostgreSQL for orders and inventory, with an admin surface gated behind role checks rather than a separate application.",
+    stack: ["Next.js", "Node.js", "Express", "PostgreSQL", "Docker"],
   },
 ];
 
-// Services / What I do
-export const services: {
-  title: string;
-  description: string;
-  icon: JSX.Element;
-  keywords: string[];
-}[] = [
+/** Client and employer work, from the résumé. Not linkable, so it is listed
+ *  as a compact index rather than dressed up as a portfolio card. */
+export const clientWork = [
   {
-    title: "Full-Stack Web Applications",
+    title: "Water & wastewater resource management",
+    client: "Cairo, Giza & Alexandria Governorates",
+    stack: "React · Java · Camunda BPM · Docker",
+  },
+  {
+    title: "Geo-enabled e-services portal",
+    client: "Ministry of Tourism, Oman",
+    stack: "React · PostGIS · Docker Swarm",
+  },
+  {
+    title: "Crime-pattern analytics dashboards",
+    client: "Ministry of Interior, Egypt",
+    stack: "React · Apache Superset · NGINX",
+  },
+  {
+    title: "Licensing & public complaint workflows",
+    client: "Alexandria Governorate",
+    stack: "Camunda BPM · Java · PostgreSQL",
+  },
+  {
+    title: "Smart asset management, GIS + IoT",
+    client: "Emaar Egypt City",
+    stack: "React · Java · NestJS · n8n · NGINX",
+  },
+  {
+    title: "Smart asset management, GIS + IoT",
+    client: "Olympic City",
+    stack: "React · Java · Docker Swarm · NGINX",
+  },
+];
+
+export const services = [
+  {
+    title: "Full-stack web applications",
     description:
-      "End-to-end apps from a React.js / Next.js front end to a NestJS, Node.js, or Java back end — typed, tested, and built to scale.",
-    icon: <Code2 className="w-6 h-6" />,
+      "End-to-end apps from a React or Next.js front end to a NestJS, Node.js or Java back end. Typed throughout, tested, and structured to survive a second team touching it.",
     keywords: ["React", "Next.js", "NestJS", "Node.js", "TypeScript"],
   },
   {
-    title: "APIs & Microservices",
+    title: "APIs & microservices",
     description:
-      "RESTful APIs and microservices architecture with clean contracts and caching — cutting response times by up to 40%.",
-    icon: <Network className="w-6 h-6" />,
+      "RESTful services with explicit contracts and a caching layer where the read path justifies one. Response times on the systems above came down by around 40%.",
     keywords: ["REST APIs", "Microservices", "PostgreSQL", "Redis"],
   },
   {
-    title: "DevOps & Deployment",
+    title: "Deployment & operations",
     description:
-      "Containerized delivery with Docker & Docker Swarm behind NGINX on Linux, with CI/CD pipelines — reducing downtime by ~30%.",
-    icon: <Container className="w-6 h-6" />,
+      "Containerised delivery with Docker and Docker Swarm behind NGINX on Linux, wired into CI/CD. Downtime on the platforms I run dropped by roughly 30%.",
     keywords: ["Docker", "Docker Swarm", "NGINX", "Linux", "CI/CD"],
   },
   {
-    title: "Workflow Automation",
+    title: "LLM features in production",
     description:
-      "Business-process automation with Camunda BPM (BPMN/DMN) that replaces manual steps — reducing processing effort by ~50%.",
-    icon: <Workflow className="w-6 h-6" />,
+      "Model output constrained to a schema, validated before it reaches a user, and repaired rather than trusted. Keys held server-side, spend capped, and the deterministic parts covered by tests that need no network. The Design Lab on this site is a worked example.",
+    keywords: ["Structured output", "Validation", "Evals", "Cloudflare Workers"],
+  },
+  {
+    title: "Workflow automation",
+    description:
+      "Business-process automation with Camunda BPM (BPMN and DMN), replacing manual routing and approval steps. Typically halves the handling effort on a process.",
     keywords: ["Camunda BPM", "BPMN", "Automation"],
   },
 ];
 
-// Resume Content
-export const RESUME_CONTENT = `
-  Name: Mohamed Adel Samy
-  Title: SOFTWARE ENGINEER
-  Contact: mohamedadel74@gmail.com | (+20)1101021996
+export const experienceTimeline = [
+  {
+    role: "Senior Software Engineer",
+    company: "Penta-b",
+    period: "Jan 2022 - Present",
+    location: "Egypt",
+    highlights: [
+      "Built and maintained full-stack applications on React with NestJS and Java back ends",
+      "Designed REST APIs and a microservices split that improved response times by 40%",
+      "Deployed and operated services on Docker and Docker Swarm, reducing downtime by 30%",
+      "Configured NGINX as reverse proxy and load balancer for request routing",
+      "Automated approval workflows with Camunda BPM, cutting manual processing by 50%",
+      "Led backend integration of smart asset tracking across GIS and IoT platforms",
+    ],
+  },
+  {
+    role: "GIS Developer",
+    company: "Edge-Pro for Information Systems",
+    period: "Jul 2020 - Jan 2022",
+    location: "Egypt",
+    highlights: [
+      "Built web-based GIS dashboards in JavaScript, HTML and CSS",
+      "Developed form-driven workflows and notification systems",
+      "Ran satellite image analysis and remote sensing for environmental research",
+      "Delivered client training and product demos on Skyline and ERDAS IMAGINE",
+    ],
+  },
+  {
+    role: "Full-Stack Developer",
+    company: "Freelance",
+    period: "Ongoing",
+    location: "Remote",
+    highlights: [
+      "E-commerce application with role-based auth on Next.js and PostgreSQL",
+      "Hospital management system on React, NestJS, PostgreSQL and Redis",
+      "Point-of-sale system on React Electron, NestJS and PostgreSQL",
+    ],
+  },
+];
 
-  PROFESSIONAL SUMMARY:
-  Results-driven Software Engineer with over 5 years of experience building scalable, secure web applications using React.js, Node.js, Java, NestJS, and JavaScript. Expertise in developing RESTful APIs, implementing microservices architecture, and managing DevOps pipelines using Docker, NGINX, and Linux. Proven success in automating business processes, enhancing performance, and delivering reliable solutions in agile environments.
+export const education = [
+  {
+    degree: "Master of Business Administration",
+    school: "Brooklyn Business School",
+    period: "2024 - Present",
+  },
+  {
+    degree: "Full Stack Web Development Diploma",
+    school: "Route Academy",
+    period: "2021 - 2022",
+  },
+  {
+    degree: "B.Sc. Civil Engineering",
+    school: "German University in Cairo",
+    period: "2013 - 2018",
+  },
+];
 
-  TECHNICAL SKILLS:
-  Languages: JavaScript, TypeScript, Java, SQL, HTML, CSS
-  Frontend: React.js, Next.js, JavaScript ES6+, Redux, HTML5, CSS3
-  Backend: Node.js, NestJS, Express.js, Java (Spring Boot), REST APIs, Microservices
-  DevOps & Tools: Docker, Docker Swarm, NGINX, Linux, Git, GitHub, CI/CD, Agile
-  Databases: PostgreSQL, MySQL, SQL Server, Database Design, Query Optimization
-  Workflow Automation: Camunda BPM, BPMN, DMN, CMMN
-  GIS Tools: PostGIS, Apache Superset, ERDAS IMAGINE
-  Soft Skills: Problem Solving, Communication, Collaboration, Agile Methodologies
+/** Grouped so the skills list reads as an inventory, not a word cloud. */
+export const skillGroups = [
+  {
+    label: "Languages",
+    items: ["TypeScript", "JavaScript", "Java", "SQL", "HTML", "CSS"],
+  },
+  {
+    label: "Front end",
+    items: ["React", "Next.js", "Redux", "Tailwind CSS"],
+  },
+  {
+    label: "Back end",
+    items: ["Node.js", "NestJS", "Express", "Spring Boot", "REST", "Microservices"],
+  },
+  {
+    label: "Data",
+    items: ["PostgreSQL", "MySQL", "SQL Server", "Redis", "PostGIS"],
+  },
+  {
+    label: "Operations",
+    items: ["Docker", "Docker Swarm", "NGINX", "Linux", "Git", "CI/CD"],
+  },
+  {
+    label: "Automation",
+    items: ["Camunda BPM", "BPMN", "DMN", "CMMN", "n8n"],
+  },
+  {
+    label: "AI",
+    items: [
+      "Gemini API",
+      "Structured output",
+      "Schema validation",
+      "Evals",
+      "Cloudflare Workers",
+    ],
+  },
+];
 
-  PROFESSIONAL EXPERIENCE:
-  January 2022 - Current: Senior Software Engineer, Penta-b
-    - Built and maintained scalable full-stack applications using React.js (frontend) and NestJS/Java (backend).
-    - Designed and implemented RESTful APIs and microservices architecture, improving response times by 40%.
-    - Deployed and managed services using Docker and Docker Swarm, reducing system downtime by 30%.
-    - Configured NGINX as a reverse proxy and load balancer to enhance performance and request routing.
-    - Automated workflows using Camunda BPM, reducing manual processing by 50%.
-    - Led backend integration of smart asset tracking systems using GIS and IoT platforms.
-    - Performed routine database maintenance, backups, and tuning for PostgreSQL, ensuring high availability.
-
-  July 2020 - January 2022: GIS Developer, Edge-Pro for Information Systems
-    - Customized web-based GIS dashboards using JavaScript, HTML, and CSS, improving visual reporting.
-    - Developed form-based workflows and notification systems, enhancing communication efficiency.
-    - Conducted satellite image analysis and remote sensing for environmental research projects.
-    - Delivered product training and demos for clients using Skyline and ERDAS IMAGINE.
-    - Created technical documentation and user guides to streamline onboarding and support.
-
-  Freelancing Projects (Full-Stack Developer):
-    - Developed NextJS, PostgreSQL full stack E-commerce Application with Role Based Authentication.
-    - Designed and developed a complete Hospital Management System using ReactJS, NestJS, PostgreSQL and Redis.
-    - Designed and developed a POS system using React Electron, NestJs and PostgreSQL.
-
-  PROJECTS:
-  - Internal Process Automation Tools: Developed full-stack tools to automate repetitive tasks and optimize work process for over 30%. (Tech: ReactJS, NestJS, Docker)
-  - Full-stack Development for Water & Wastewater Management (Egypt): Led design and deployment of resource management application across Cairo, Giza, and Alexandria Governorates. (Tech: ReactJS, Java, Docker, Camunda BPM)
-  - Geo-Enabled E-Services for Oman's Ministry of Tourism (MOT): Developed geo-aware features for MOT's tourism portal. (Tech: ReactJS, PostGIS, Docker Swarm)
-  - GIS Dashboards for Egypt's Ministry of Interior: Built interactive dashboards with geo-analytics for crime pattern visualization. (Tech: ReactJS, Apache Superset, NGINX)
-  - BPM Workflow Automation for Alexandria Governorate: Designed Camunda-based workflows for licensing and public complaint systems. (Tech: Camunda BPM, Java, Docker, PostgreSQL)
-  - Emaar Egypt City Smart System: Built an asset management system integrated with GIS and IoT platforms. (Tech: ReactJS, Java, Docker, NGINX, NestJS RESTful APIs, n8n)
-  - Olympic City Smart System: Built an asset management system integrated with GIS and IoT platforms. (Tech: ReactJS, Java, Docker Swarm, NGINX, RESTful APIs)
-  - Mapp Enterprise Dashboard Customization: Customized dashboards using JavaScript API and CSS. (Tech: JavaScript, CSS, Mapp Enterprise)
-  - Full-Stack E-Commerce Application: Created a fully customizable E-Commerce Application with Role based Authentication. (Tech: NextJs, PostgreSQL)
-  - Backend for POS System: Designed and Developed the backend for a Point of Sale (POS) for a cafeteria. (Tech: NestJS, PostgreSQL)
-  - Backend for a Hospital Management System: Designed and developed the backend for a Hospital Management System. (Tech: NextJs, PostgreSQL, Redis)
-
-  EDUCATION:
-  2024-Current: Master of Business Administration, Brooklen Business School
-  2021-2022: Full Stack Web Development Diploma, Route Academy
-  2013-2018: Bachelor's degree in civil engineering, German University in Cairo (GUC)
-
-  LANGUAGES:
-  Arabic, English, German
-`;
+export const facts = [
+  { value: "5+", label: "Years shipping" },
+  { value: "40%", label: "Faster API responses" },
+  { value: "30%", label: "Less downtime" },
+  { value: "50%", label: "Less manual processing" },
+];

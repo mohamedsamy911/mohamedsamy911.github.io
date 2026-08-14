@@ -20,10 +20,9 @@ const StructuredData: React.FC = () => {
         item: {
           "@type": "SoftwareSourceCode",
           name: p.title,
-          description: p.description,
-          codeRepository: p.github,
-          url: p.github,
-          keywords: p.tags.map((t) => t.label).join(", "),
+          description: p.summary,
+          ...(p.repo ? { codeRepository: p.repo, url: p.repo } : {}),
+          keywords: p.stack.join(", "),
           author: { "@id": `${SITE}/#person` },
         },
       })),

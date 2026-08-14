@@ -1,12 +1,137 @@
 @import "tailwindcss";
 
-/* Prevent horizontal overflow from animated elements causing mobile viewport recalculation */
-html, body {
-  overflow-x: hidden;
-  -webkit-overflow-scrolling: touch;
+/* Tailwind v4 is CSS-first and ignores tailwind.config.js, so `darkMode: "class"`
+   never applied and every `dark:` utility was silently following the OS media
+   query instead of the theme toggle. This restores class-based theming. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ── Theme ────────────────────────────────────────────────────────────────
+   One source of truth. `@theme inline` maps utilities onto the custom
+   properties rather than the resolved values, so the `.dark` block below
+   re-themes the whole site without a single conditional in a component. */
+@theme inline {
+  --color-paper: var(--paper);
+  --color-surface: var(--surface);
+  --color-sunk: var(--sunk);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-ink-faint: var(--ink-faint);
+  --color-rule: var(--rule);
+  --color-rule-strong: var(--rule-strong);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-soft: var(--accent-soft);
+  --color-ok: var(--ok);
+  --color-err: var(--err);
+
+  --font-display: Charter, "Bitstream Charter", "Iowan Old Style", "Source Serif 4", Georgia, serif;
+  --font-sans: ui-sans-serif, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
 }
 
-/* Use dvh for stable mobile viewport height */
-#root > div {
-  min-height: 100dvh;
+/* Contrast for every pair below is gated in scripts/verify_states.mjs; the
+   ratios were measured, not estimated. Lowest text pair is 5.30:1, lowest
+   UI-border pair 3.46:1 (light) / 3.53:1 (dark). */
+:root {
+  --paper: #faf7f2;
+  --surface: #ffffff;
+  --sunk: #f2ede4;
+  --ink: #1b1917;
+  --ink-muted: #5c554b;
+  --ink-faint: #6e6659;
+  --rule: #e4ded3;
+  --rule-strong: #8c8477;
+  --accent: #a33b12;
+  --accent-ink: #ffffff;
+  --accent-soft: #f6e9e0;
+  --ok: #1f6a3f;
+  --err: #a32218;
+  color-scheme: light;
+}
+
+.dark {
+  --paper: #131211;
+  --surface: #1c1a17;
+  --sunk: #0e0d0c;
+  --ink: #f0ebe2;
+  --ink-muted: #a79e8f;
+  --ink-faint: #9a9183;
+  --rule: #2c2823;
+  --rule-strong: #767063;
+  --accent: #e8944b;
+  --accent-ink: #1b1917;
+  --accent-soft: #2a211a;
+  --ok: #6fcf97;
+  --err: #f08a80;
+  color-scheme: dark;
+}
+
+/* ── Base ─────────────────────────────────────────────────────────────── */
+html {
+  scroll-behavior: smooth;
+  /* Sticky header is 4rem; keeps anchored headings from hiding under it
+     (WCAG 2.4.11 Focus Not Obscured). */
+  scroll-padding-top: 5rem;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+/* One visible focus style for the whole site. The old build set
+   `focus:outline-none` with no replacement on the theme toggle. */
+/* The offset puts the ring on the surface *behind* the control, so it stays
+   visible even on an accent-filled button (where ring and fill share a hue). */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Element defaults belong in @layer base: unlayered rules beat every layered
+   one, so leaving these at top level made `h3 { font-family }` win over a
+   `font-mono` utility on the same element and silently set the mono gutter
+   labels in the display serif. */
+@layer base {
+  /* Headings set in the display serif; body stays in the sans. */
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+}
+
+/* ── Motion ───────────────────────────────────────────────────────────────
+   The previous build had 25 infinitely-animating elements and zero
+   reduced-motion handling. Everything is opt-out now. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

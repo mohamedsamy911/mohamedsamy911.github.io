@@ -1,0 +1,22 @@
+# Live eval for the Design Lab. Manual only: it spends tokens and the model is
+# non-deterministic, so it must never gate a deploy. The deterministic tests in
+# main.yml cover the compiler, validator and layout on every push.
+name: Design Lab eval
+
+on:
+  workflow_dispatch:
+
+jobs:
+  eval:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: "npm"
+      - run: npm ci
+      - name: Run live eval against the deployed Worker
+        run: node scripts/eval_designlab.mjs
+        env:
+          VITE_DESIGNLAB_ENDPOINT: ${{ vars.VITE_DESIGNLAB_ENDPOINT }}

@@ -1,50 +1,42 @@
-import "./App.css";
 import HeroSection from "./components/HeroSection";
 import { Navbar } from "./components/NavBar";
 import AboutSection from "./components/AboutSection";
 import ServicesSection from "./components/ServicesSection";
 import ContactSection from "./components/ContactSection";
 import ProjectsSection from "./components/ProjectsSection";
-import { ThemeProvider, useTheme } from "./context/ThemeContext";
-import AIChat from "./components/AIChat";
+import DesignLab from "./components/DesignLab";
+import { ThemeProvider } from "./context/ThemeContext";
 import Footer from "./components/Footer";
 import StructuredData from "./components/StructuredData";
 import ConsentBanner from "./components/ConsentBanner";
-import { useEffect } from "react";
 
 function App() {
   return (
     <ThemeProvider>
-      <PortfolioContent />
-    </ThemeProvider>
-  );
-}
-
-function PortfolioContent() {
-  const { theme } = useTheme();
-  useEffect(() => {
-    const themeColorMeta = document.querySelector('meta[name="theme-color"]');
-    if (themeColorMeta) {
-      if (theme === "dark") {
-        themeColorMeta.setAttribute("content", "oklch(21% 0.034 264.665)");
-      } else {
-        themeColorMeta.setAttribute("content", "#E6EDFF");
-      }
-    }
-  }, [theme]);
-  return (
-    <div className="min-h-screen bg-white dark:bg-slate-900 dark:text-white transition-colors duration-300">
       <StructuredData />
+
+      {/* First tab stop: lets keyboard users jump the header (WCAG 2.4.1). */}
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-sm focus:bg-accent focus:px-4 focus:py-2.5 focus:text-sm focus:font-medium focus:text-accent-ink"
+      >
+        Skip to content
+      </a>
+
       <Navbar />
-      <HeroSection />
-      <ProjectsSection />
-      <AboutSection />
-      <ServicesSection />
-      <ContactSection />
-      <AIChat />
+
+      <main id="main">
+        <HeroSection />
+        <ProjectsSection />
+        <DesignLab />
+        <AboutSection />
+        <ServicesSection />
+        <ContactSection />
+      </main>
+
       <Footer />
       <ConsentBanner />
-    </div>
+    </ThemeProvider>
   );
 }
 

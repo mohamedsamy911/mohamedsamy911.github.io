@@ -1,248 +1,185 @@
-import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Link as ScrollLink } from "react-scroll";
 import { Menu, X } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
-import { useTheme } from "../context/ThemeContext";
+import { PROFILE } from "../constants";
 
 const navItems = [
-  { id: "home", label: "Home" },
-  { id: "projects", label: "Projects" },
+  { id: "projects", label: "Work" },
+  { id: "lab", label: "Lab" },
   { id: "about", label: "About" },
   { id: "services", label: "Services" },
   { id: "contact", label: "Contact" },
 ];
 
 export const Navbar: React.FC = () => {
-  const { theme } = useTheme();
+  const reduce = useReducedMotion();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
-
-  const isDark = theme === "dark";
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
+    let frame = 0;
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-
-      const sections = ["home", "projects", "about", "services", "contact"];
-      for (const section of sections) {
-        const element = document.getElementById(section);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          if (rect.top <= 100 && rect.bottom >= 100) {
-            setActiveSection(section);
-            break;
-          }
+      if (frame) return;
+      frame = requestAnimationFrame(() => {
+        frame = 0;
+        setIsScrolled(window.scrollY > 24);
+        const ids = ["home", ...navItems.map((i) => i.id)];
+        // Last section whose top has passed the header line wins, so the
+        // final section stays active at the bottom of the page.
+        let current = ids[0];
+        for (const id of ids) {
+          const el = document.getElementById(id);
+          if (el && el.getBoundingClientRect().top <= 120) current = id;
         }
-      }
+        setActiveSection(current);
+      });
     };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (frame) cancelAnimationFrame(frame);
+    };
   }, []);
 
-  // Lock body scroll when mobile menu open
+  // Lock scroll, close on Escape, and hand focus back to the trigger.
   useEffect(() => {
-    if (mobileMenuOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
+    if (!mobileMenuOpen) return;
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setMobileMenuOpen(false);
+        menuButtonRef.current?.focus();
+      }
+    };
+    document.addEventListener("keydown", onKey);
     return () => {
       document.body.style.overflow = "";
+      document.removeEventListener("keydown", onKey);
     };
   }, [mobileMenuOpen]);
 
-  return (
-    <motion.nav
-      className={`fixed top-0 w-full z-50 transition-all duration-300 border-b ${
-        isScrolled
-          ? isDark
-            ? "bg-slate-900/80 backdrop-blur-xl border-slate-800/50 shadow-lg shadow-black/10"
-            : "bg-white/80 backdrop-blur-xl border-slate-200/50 shadow-lg shadow-slate-200/30"
-          : "bg-transparent border-transparent"
-      }`}
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.5 }}
-    >
-      <div className="container mx-auto">
-        <div className="flex justify-between items-center px-6 md:px-10 h-18">
-          {/* Logo */}
-          <motion.div whileHover={{ scale: 1.05 }} className="shrink-0">
-            <ScrollLink
-              href="#home"
-              to="home"
-              smooth={true}
-              duration={500}
-              className="cursor-pointer flex items-center"
-            >
-              <img
-                src={"/logo.webp"}
-                alt="Mohamed Samy logo"
-                width={56}
-                height={56}
-                decoding="async"
-                className="w-14 h-14"
-              />
-            </ScrollLink>
-          </motion.div>
+  const linkClass = (id: string) =>
+    `relative cursor-pointer py-1 text-sm transition-colors ${
+      activeSection === id
+        ? "text-ink"
+        : "text-ink-muted hover:text-ink"
+    }`;
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-1">
-            <div
-              className={`flex items-center gap-1 p-1 rounded-full ${
-                isScrolled
-                  ? isDark
-                    ? "bg-slate-800/50"
-                    : "bg-slate-100/50"
-                  : ""
-              }`}
-            >
-              {navItems.map((item) => (
+  return (
+    <header
+      className={`fixed top-0 z-50 w-full border-b transition-colors duration-300 ${
+        isScrolled
+          ? "border-rule bg-paper/85 backdrop-blur-md"
+          : "border-transparent bg-transparent"
+      }`}
+    >
+      <nav
+        aria-label="Primary"
+        className="mx-auto flex h-16 w-full max-w-5xl items-center justify-between px-6"
+      >
+        <ScrollLink
+          to="home"
+          href="#home"
+          smooth={true}
+          duration={500}
+          className="-my-1 inline-flex cursor-pointer items-center py-1.5 font-mono text-sm tracking-tight text-ink"
+        >
+          {PROFILE.name}
+        </ScrollLink>
+
+        <div className="hidden items-center gap-8 md:flex">
+          <ul className="flex items-center gap-7">
+            {navItems.map((item) => (
+              <li key={item.id}>
                 <ScrollLink
-                  href={`#${item.id}`}
-                  key={item.id}
                   to={item.id}
+                  href={`#${item.id}`}
                   smooth={true}
                   duration={500}
-                  offset={-80}
-                  className={`relative px-4 py-2 text-sm font-medium cursor-pointer rounded-full transition-all duration-200 ${
-                    activeSection === item.id
-                      ? isDark
-                        ? "text-white"
-                        : "text-white"
-                      : isDark
-                      ? "text-slate-400 hover:text-white"
-                      : "text-slate-600 hover:text-slate-900"
-                  }`}
-                  onSetActive={() => setActiveSection(item.id)}
+                  offset={-72}
+                  aria-current={activeSection === item.id ? "true" : undefined}
+                  className={linkClass(item.id)}
                 >
+                  {item.label}
+                  {/* Underline, not colour alone, marks the active section. */}
                   {activeSection === item.id && (
-                    <motion.span
-                      layoutId="nav-pill"
-                      className={`absolute inset-0 rounded-full ${
-                        isDark
-                          ? "bg-blue-600"
-                          : "bg-blue-600"
-                      }`}
-                      transition={{
-                        type: "spring",
-                        bounce: 0.2,
-                        duration: 0.6,
-                      }}
+                    <span
+                      aria-hidden="true"
+                      className="absolute -bottom-0.5 left-0 h-px w-full bg-accent"
                     />
                   )}
-                  <span className="relative z-10">{item.label}</span>
                 </ScrollLink>
-              ))}
-            </div>
-            <div className="ml-3">
-              <ThemeToggle />
-            </div>
-          </div>
+              </li>
+            ))}
+          </ul>
+          <ThemeToggle />
+        </div>
 
-          {/* Mobile: Hamburger Only */}
+        <div className="flex items-center gap-2 md:hidden">
+          <ThemeToggle />
           <button
-            className={`md:hidden p-2 rounded-xl transition-colors cursor-pointer ${
-              isDark
-                ? "text-slate-300 hover:bg-slate-800"
-                : "text-slate-700 hover:bg-slate-100"
-            }`}
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label="Toggle menu"
+            ref={menuButtonRef}
+            type="button"
+            onClick={() => setMobileMenuOpen((open) => !open)}
+            aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-menu"
+            aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+            className="-mr-2 inline-flex h-11 w-11 items-center justify-center text-ink"
           >
             {mobileMenuOpen ? (
-              <X className="w-6 h-6" />
+              <X className="h-5 w-5" aria-hidden="true" />
             ) : (
-              <Menu className="w-6 h-6" />
+              <Menu className="h-5 w-5" aria-hidden="true" />
             )}
           </button>
         </div>
+      </nav>
 
-        {/* Mobile Menu */}
-        <AnimatePresence>
-          {mobileMenuOpen && (
-            <>
-              {/* Backdrop */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
-                className="fixed inset-0 top-[72px] bg-black/20 backdrop-blur-sm md:hidden z-40"
-                onClick={() => setMobileMenuOpen(false)}
-              />
-              {/* Drawer */}
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.25 }}
-                className={`md:hidden absolute left-4 right-4 top-[76px] rounded-2xl border z-50 overflow-hidden shadow-2xl ${
-                  isDark
-                    ? "bg-slate-900/95 border-slate-700/50 shadow-black/30 backdrop-blur-xl"
-                    : "bg-white/95 border-slate-200/50 shadow-slate-300/30 backdrop-blur-xl"
-                }`}
-              >
-                <div className="py-3 px-3 space-y-1">
-                  {navItems.map((item, index) => (
-                    <motion.div
-                      key={item.id}
-                      initial={{ opacity: 0, x: -15 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.06 }}
-                    >
-                      <ScrollLink
-                        to={item.id}
-                        smooth={true}
-                        duration={500}
-                        offset={-80}
-                        className={`flex items-center justify-between px-4 py-3 text-base font-semibold rounded-xl transition-all duration-200 cursor-pointer ${
-                          activeSection === item.id
-                            ? isDark
-                              ? "bg-blue-600 text-white"
-                              : "bg-blue-600 text-white"
-                            : isDark
-                            ? "text-slate-300 hover:bg-slate-800/60"
-                            : "text-slate-700 hover:bg-slate-100"
-                        }`}
-                        onClick={() => setMobileMenuOpen(false)}
-                      >
-                        <span>{item.label}</span>
-                        {activeSection === item.id && (
-                          <motion.div
-                            initial={{ scale: 0 }}
-                            animate={{ scale: 1 }}
-                            className="w-2 h-2 rounded-full bg-white"
-                          />
-                        )}
-                      </ScrollLink>
-                    </motion.div>
-                  ))}
-                </div>
-
-                {/* Divider + Theme Toggle inside drawer */}
-                <div
-                  className={`px-4 py-3 border-t flex items-center justify-between ${
-                    isDark ? "border-slate-800" : "border-slate-100"
-                  }`}
-                >
-                  <span
-                    className={`text-sm font-medium ${
-                      isDark ? "text-slate-500" : "text-slate-400"
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            id="mobile-menu"
+            initial={{ opacity: 0, y: reduce ? 0 : -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: reduce ? 0 : -8 }}
+            transition={{ duration: 0.2 }}
+            className="border-t border-rule bg-paper md:hidden"
+          >
+            <ul className="mx-auto w-full max-w-5xl px-6 py-2">
+              {navItems.map((item) => (
+                <li key={item.id} className="border-b border-rule last:border-0">
+                  <ScrollLink
+                    to={item.id}
+                    href={`#${item.id}`}
+                    smooth={true}
+                    duration={500}
+                    offset={-72}
+                    onClick={() => setMobileMenuOpen(false)}
+                    aria-current={
+                      activeSection === item.id ? "true" : undefined
+                    }
+                    className={`flex cursor-pointer items-center justify-between py-4 text-base ${
+                      activeSection === item.id ? "text-accent" : "text-ink"
                     }`}
                   >
-                    Appearance
-                  </span>
-                  <ThemeToggle />
-                </div>
-              </motion.div>
-            </>
-          )}
-        </AnimatePresence>
-      </div>
-    </motion.nav>
+                    {item.label}
+                    {activeSection === item.id && (
+                      <span className="font-mono text-xs" aria-hidden="true">
+                        current
+                      </span>
+                    )}
+                  </ScrollLink>
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </header>
   );
 };
