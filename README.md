@@ -4,8 +4,8 @@ Personal site and portfolio. Live at
 **[mohamedsamy911.github.io](https://mohamedsamy911.github.io/)**.
 
 A static React site on GitHub Pages, plus one Cloudflare Worker that backs the
-Design Lab. The Worker exists only because the site is static and a model API
-key must never reach the browser.
+Design Lab. The Worker is the only server in the system, and exists solely
+because a model API key must never reach the browser.
 
 ---
 
@@ -84,10 +84,12 @@ explicit submit reaches the model.
 - **Cloudflare Workers** + KV for the Design Lab proxy, cache and spend cap
 - **Playwright** for the quality gates, asset generation and performance measurement
 
-Deployed to GitHub Pages by [`.github/workflows/main.yml`](.github/workflows/main.yml).
 The build runs `tsc`, the unit tests, `vite build`, then `prerender.mjs`, which
 renders the SPA headlessly and writes real HTML back to `dist/index.html` so
 crawlers and social scrapers see content without executing JavaScript.
+
+That last step needs a headless browser on the build host, which is the one
+thing a host will not give you by default. See "Deployment".
 
 ---
 
@@ -198,14 +200,34 @@ rather than rebuilt in CI.
 
 ## Deployment
 
-**Site** — push to `master`; GitHub Actions builds and publishes to Pages.
-`VITE_DESIGNLAB_ENDPOINT` is a repository *variable*; the rest are secrets.
+**Site** — GitHub Pages only. Push to `master`;
+[`main.yml`](.github/workflows/main.yml) builds and publishes.
 
-**Worker** — deployed separately:
+`VITE_DESIGNLAB_ENDPOINT` is a repository *variable* (Settings, Secrets and
+variables, Actions, Variables), not a secret. Without it the Design Lab falls
+back to recorded runs rather than calling the model.
+
+The build's last step, `prerender.mjs`, launches headless Chromium, which a
+build host does not provide by default. `main.yml` installs it explicitly:
+
+```yaml
+- run: npx playwright install --with-deps chromium
+```
+
+If a host ever lacks it, `prerender.mjs` prints a warning and exits 0 rather
+than failing the deploy, so a working SPA still ships. The cost is that
+non-JavaScript crawlers see an empty shell, so treat that warning in build logs
+as something to fix, not noise.
+
+**Worker** — deployed separately from the site:
 
 ```bash
 cd worker && npx wrangler deploy
 ```
+
+Its `ALLOWED_ORIGINS` is pinned to `https://mohamedsamy911.github.io` plus
+localhost. Any new site origin must be added there and the Worker redeployed, or
+the Design Lab will 403 from it.
 
 Full setup, model choice and rate limits are in [worker/README.md](worker/README.md).
 
