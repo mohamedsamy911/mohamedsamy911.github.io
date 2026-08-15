@@ -78,11 +78,11 @@ explicit submit reaches the model.
 
 - **React 19** + **TypeScript**, built by **Vite 7**
 - **Tailwind CSS v4** (CSS-first, no config file)
-- **Framer Motion** for entrance transitions, all opt-out under `prefers-reduced-motion`
+- **No animation library.** Scroll reveals are `IntersectionObserver` plus a CSS transition; the hero does not animate at all, because its entrance was costing 3.3s of LCP on a throttled phone
 - **lucide-react** icons, **react-scroll** for section navigation
 - **EmailJS** for the contact form
 - **Cloudflare Workers** + KV for the Design Lab proxy, cache and spend cap
-- **Playwright** for the quality gates and asset generation
+- **Playwright** for the quality gates, asset generation and performance measurement
 
 Deployed to GitHub Pages by [`.github/workflows/main.yml`](.github/workflows/main.yml).
 The build runs `tsc`, the unit tests, `vite build`, then `prerender.mjs`, which
@@ -132,6 +132,22 @@ accepts the consent banner.
 | `npm run preview` | Serve the production build |
 
 ---
+
+## Performance
+
+Measured on the production build at 4G with 4x CPU throttling, medians of four
+runs. The numbers below are from `scripts/`-style Playwright runs, not estimates.
+
+| | LCP | Bundle (gzip) |
+|---|---|---|
+| Before | 4448 ms | 129.8 KB |
+| Hero entrance animation removed | 2636 ms | 129.8 KB |
+| Animation library removed | **2448 ms** | **91.0 KB** |
+
+CLS is 0 throughout. The hero portrait is also emitted at 2x display size and
+pre-desaturated rather than being a 1.35-megapixel source filtered in CSS,
+though that turned out to be worth only ~3% at 4G: the entrance animation was
+the real cost, not the image.
 
 ## Quality gates
 

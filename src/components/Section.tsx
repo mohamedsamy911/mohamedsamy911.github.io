@@ -1,24 +1,50 @@
-import { motion, useReducedMotion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 import type { ReactNode } from "react";
 
-/** Fade-and-rise on first view. Collapses to a plain fade when the visitor
- *  has asked for reduced motion. */
+/**
+ * Fade-and-rise on first view.
+ *
+ * IntersectionObserver plus a CSS transition, rather than an animation library.
+ * This was the last real consumer of framer-motion, and the effect is four
+ * lines of platform API; the library was costing far more in bundle size than
+ * the behaviour is worth. Honours reduced motion by showing immediately.
+ */
 export const Reveal: React.FC<{
   children: ReactNode;
   delay?: number;
   className?: string;
 }> = ({ children, delay = 0, className }) => {
-  const reduce = useReducedMotion();
+  const ref = useRef<HTMLDivElement>(null);
+  const [shown, setShown] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setShown(true);
+      return;
+    }
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setShown(true);
+          io.disconnect();
+        }
+      },
+      { rootMargin: "0px 0px -60px 0px" }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
   return (
-    <motion.div
-      className={className}
-      initial={{ opacity: 0, y: reduce ? 0 : 12 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.45, delay, ease: [0.22, 1, 0.36, 1] }}
+    <div
+      ref={ref}
+      className={`reveal${shown ? " is-shown" : ""}${className ? ` ${className}` : ""}`}
+      style={delay ? { transitionDelay: `${delay}s` } : undefined}
     >
       {children}
-    </motion.div>
+    </div>
   );
 };
 

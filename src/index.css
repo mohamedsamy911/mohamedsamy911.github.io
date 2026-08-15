@@ -119,6 +119,34 @@ body {
   }
 }
 
+/* Scroll reveal, driven by IntersectionObserver in components/Section.tsx.
+   Kept unlayered so it is not accidentally beaten by a utility. */
+.reveal {
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal.is-shown {
+  opacity: 1;
+  transform: none;
+}
+
+/* Mobile menu enter. Exit is immediate, which is imperceptible at this size
+   and avoids keeping an animation library alive for one transition. */
+.menu-enter {
+  animation: menu-in 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
 /* ── Motion ───────────────────────────────────────────────────────────────
    The previous build had 25 infinitely-animating elements and zero
    reduced-motion handling. Everything is opt-out now. */

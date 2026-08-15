@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Link as ScrollLink } from "react-scroll";
 import { Menu, X } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
@@ -14,7 +13,6 @@ const navItems = [
 ];
 
 export const Navbar: React.FC = () => {
-  const reduce = useReducedMotion();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
@@ -140,16 +138,11 @@ export const Navbar: React.FC = () => {
         </div>
       </nav>
 
-      <AnimatePresence>
-        {mobileMenuOpen && (
-          <motion.div
-            id="mobile-menu"
-            initial={{ opacity: 0, y: reduce ? 0 : -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: reduce ? 0 : -8 }}
-            transition={{ duration: 0.2 }}
-            className="border-t border-rule bg-paper md:hidden"
-          >
+      {mobileMenuOpen && (
+        <div
+          id="mobile-menu"
+          className="menu-enter border-t border-rule bg-paper md:hidden"
+        >
             <ul className="mx-auto w-full max-w-5xl px-6 py-2">
               {navItems.map((item) => (
                 <li key={item.id} className="border-b border-rule last:border-0">
@@ -176,10 +169,9 @@ export const Navbar: React.FC = () => {
                   </ScrollLink>
                 </li>
               ))}
-            </ul>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          </ul>
+        </div>
+      )}
     </header>
   );
 };

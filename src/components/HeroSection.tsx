@@ -1,4 +1,3 @@
-import { motion, useReducedMotion } from "framer-motion";
 import { Link as ScrollLink } from "react-scroll";
 import { ArrowDown, ArrowRight } from "lucide-react";
 import { PROFILE } from "../constants";
@@ -10,46 +9,45 @@ const facts = [
   { label: "Working in", value: "React · NestJS · PostgreSQL · Docker" },
 ];
 
+/**
+ * The hero renders immediately, with no entrance animation.
+ *
+ * It used to fade in with a staggered `opacity: 0 -> 1`. The page is
+ * prerendered, but React discards that DOM on boot and remounts at opacity 0,
+ * so the already-painted content vanished and faded back. Measured on a
+ * 4x-throttled phone: every resource was on the wire by 437ms and first paint
+ * landed at 1512ms, but LCP was not recorded until 4856ms -- the whole 3.3s gap
+ * was the fade. Below-fold sections still animate on scroll, where it costs
+ * nothing.
+ */
 const HeroSection: React.FC = () => {
-  const reduce = useReducedMotion();
-
-  const rise = (delay: number) => ({
-    initial: { opacity: 0, y: reduce ? 0 : 14 },
-    animate: { opacity: 1, y: 0 },
-    transition: { duration: 0.55, delay, ease: [0.22, 1, 0.36, 1] as const },
-  });
-
   return (
     <section id="home" className="scroll-mt-24">
       <div className="mx-auto w-full max-w-5xl px-6 pb-20 pt-32 md:pb-28 md:pt-40">
         <div className="grid items-start gap-12 md:grid-cols-[1fr_auto] md:gap-16">
           <div>
-            <motion.p
-              {...rise(0)}
+            <p
               className="font-mono text-xs uppercase tracking-[0.2em] text-accent"
             >
               {PROFILE.role}
-            </motion.p>
+            </p>
 
-            <motion.h1
-              {...rise(0.06)}
+            <h1
               className="mt-5 text-[clamp(2.75rem,9vw,5.5rem)] leading-[0.95] tracking-[-0.03em]"
             >
               {PROFILE.name}
-            </motion.h1>
+            </h1>
 
-            <motion.p
-              {...rise(0.12)}
+            <p
               className="mt-7 max-w-[54ch] text-lg leading-relaxed text-ink-muted sm:text-xl"
             >
               I build web systems and keep them running. Five years of
               production work across government, utilities and private
               clients, from the React front end down to the containers and
               the reverse proxy.
-            </motion.p>
+            </p>
 
-            <motion.div
-              {...rise(0.18)}
+            <div
               className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-4"
             >
               <ScrollLink
@@ -78,11 +76,11 @@ const HeroSection: React.FC = () => {
                   aria-hidden="true"
                 />
               </a>
-            </motion.div>
+            </div>
           </div>
 
           {/* Plain, framed portrait. No tilt, no glare, no fake status dot. */}
-          <motion.div {...rise(0.24)} className="order-first md:order-last">
+          <div className="order-first md:order-last">
             {/* Pre-cropped and pre-desaturated at 2x display size by
                 scripts/generate_brand_assets.mjs. The full-size source was the
                 measured LCP element on mobile: 1.35MP decoded into a 224x280
@@ -96,12 +94,11 @@ const HeroSection: React.FC = () => {
               decoding="async"
               className="h-[280px] w-[224px] border border-rule object-cover object-top"
             />
-          </motion.div>
+          </div>
         </div>
 
         {/* Facts strip: the substance the old build put in a glass card. */}
-        <motion.dl
-          {...rise(0.3)}
+        <dl
           className="mt-16 grid gap-px overflow-hidden border-t border-rule pt-8 sm:grid-cols-3"
         >
           {facts.map((f) => (
@@ -114,7 +111,7 @@ const HeroSection: React.FC = () => {
               </dd>
             </div>
           ))}
-        </motion.dl>
+        </dl>
       </div>
     </section>
   );
