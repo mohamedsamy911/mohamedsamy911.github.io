@@ -21,22 +21,31 @@ try {
   browser = await chromium.launch();
 } catch (error) {
   await closeServer();
-  const missing = /Executable doesn't exist/i.test(String(error?.message));
-  if (!missing) throw error;
 
+  // Any launch failure is treated the same, because they all mean the same
+  // thing: this host cannot run a browser. Matching on one message was a
+  // mistake -- a build image can be missing the binary ("Executable doesn't
+  // exist") or the shared libraries it links against ("error while loading
+  // shared libraries: libatk-1.0.so.0"), and the second slipped straight
+  // through. Failures *after* launch still throw, since those are real bugs
+  // in the page rather than a property of the host.
   console.warn(
     [
       "",
-      "WARNING: prerender skipped, no headless browser on this build host.",
+      "WARNING: prerender skipped, no usable headless browser on this host.",
+      "",
+      `  ${String(error?.message ?? error).split("\n")[0]}`,
       "",
       "  dist/ is a working SPA, but the static HTML no longer contains the",
       "  rendered page. Crawlers and social scrapers that do not run JavaScript",
       "  will see an empty shell.",
       "",
-      "  Fix by installing the browser before the build, e.g. set the build",
-      "  command to:",
+      "  A host needs both the browser binary and its system libraries:",
+      "    npx playwright install --with-deps chromium",
       "",
-      "    npx playwright install chromium --only-shell && npm run build",
+      "  --with-deps needs apt and root. Build images that do not grant those",
+      "  (Cloudflare Pages and Workers Builds among them) cannot prerender at",
+      "  all; build the site somewhere that can, such as GitHub Actions.",
       "",
     ].join("\n")
   );
