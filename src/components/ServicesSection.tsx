@@ -8,7 +8,7 @@ const ServicesSection: React.FC = () => (
       label="Services"
       titleId="services-title"
       title="What I can take off your plate"
-      lede="Four things I do repeatedly and can be held to. The numbers are from systems currently in production, not projections."
+      lede="The work I do repeatedly and can be held to. The numbers are from systems currently in production, not projections."
     />
 
     <ol className="mt-14 md:mt-16">

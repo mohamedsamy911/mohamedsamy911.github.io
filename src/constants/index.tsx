@@ -12,7 +12,7 @@ export const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || "";
 // Identity: single source of truth for contact details, schema and meta copy.
 export const PROFILE = {
   name: "Mohamed Samy",
-  role: "Full Stack Engineer",
+  role: "Senior Software Engineer",
   location: "Riyadh, Saudi Arabia",
   email: "mohamedadel74@gmail.com",
   phone: "+966 50 655 7963",
@@ -34,6 +34,24 @@ export type ClientSystem = {
 };
 
 export const clientSystems: ClientSystem[] = [
+  {
+    title: "National environmental compliance monitoring",
+    client: "National Center for Environmental Compliance, Saudi Arabia",
+    summary:
+      "Noise and light readings from more than 200 sensors across the Kingdom, arriving in one platform built on Penta-b's Maps & Apps. I am the only engineer on it, so the whole delivery is mine: the RHEL hosts, the Docker Swarm above them, a PostgreSQL Patroni cluster that fails over without anyone waking up, a RabbitMQ cluster carrying the telemetry, a WSO2 layer mediating between each sensor vendor's system and ours, and the compliance plugins the regulator actually looks at.",
+    stack: [
+      "MnA",
+      "React",
+      "TypeScript",
+      "Node.js",
+      "WSO2 MI",
+      "RabbitMQ",
+      "PostgreSQL Patroni",
+      "Docker Swarm",
+      "RHEL",
+    ],
+    outcome: "200+ sensors, live, on high-availability on-premise infrastructure",
+  },
   {
     title: "Water and wastewater resource management",
     client: "Cairo, Giza and Alexandria Governorates",
@@ -62,21 +80,6 @@ export const clientSystems: ClientSystem[] = [
     summary:
       "Geo-aware features for the ministry's public tourism portal, with PostGIS answering the spatial queries and the services deployed on Docker Swarm.",
     stack: ["React", "PostGIS", "Docker Swarm"],
-  },
-  {
-    title: "Crime-pattern analytics dashboards",
-    client: "Ministry of Interior, Egypt",
-    summary:
-      "Interactive dashboards with geo-analytics for visualising crime patterns across regions, served behind NGINX.",
-    stack: ["React", "Apache Superset", "NGINX"],
-  },
-  {
-    title: "Internal process automation",
-    client: "Penta-b",
-    summary:
-      "Full-stack tools that took repetitive internal tasks off the team, from request intake through to completion.",
-    stack: ["React", "NestJS", "Docker"],
-    outcome: "Optimised the affected processes by over 30%",
   },
 ];
 
@@ -138,10 +141,16 @@ export const services = [
     keywords: ["REST APIs", "Microservices", "PostgreSQL", "Redis"],
   },
   {
-    title: "Deployment & operations",
+    title: "High-availability deployment",
     description:
-      "Containerised delivery with Docker and Docker Swarm behind NGINX on Linux, wired into CI/CD. Downtime on the platforms I run dropped by roughly 30%.",
-    keywords: ["Docker", "Docker Swarm", "NGINX", "Linux", "CI/CD"],
+      "Containerised delivery on RHEL and Ubuntu with Docker Swarm behind NGINX, PostgreSQL replicated under Patroni so a failed primary is a non-event, and firewall rules tight enough for a government security review. Downtime on the platforms I run dropped by roughly 30%.",
+    keywords: ["Docker Swarm", "RHEL", "PostgreSQL Patroni", "NGINX", "CI/CD"],
+  },
+  {
+    title: "Event-driven integration",
+    description:
+      "Kafka and RabbitMQ carrying events between services, Debezium turning database writes into those events, and WSO2 Micro Integrator sitting between systems whose owners will never agree on a format. Built for telemetry that does not stop arriving.",
+    keywords: ["Apache Kafka", "RabbitMQ", "Debezium", "WSO2 MI"],
   },
   {
     title: "LLM features in production",
@@ -162,12 +171,13 @@ export const experienceTimeline = [
     role: "Senior Software Engineer",
     company: "Penta-b",
     period: "Jan 2022 - Present",
-    location: "Egypt",
+    location: "Egypt · Saudi Arabia",
     highlights: [
-      "Built and maintained full-stack applications on React with NestJS and Java back ends",
+      "Sole engineer on the NCEC environmental compliance platform: configuration, high-availability deployment, sensor integration and compliance plugins end to end",
+      "Run production stacks on RHEL with Docker Swarm behind NGINX, including PostgreSQL Patroni clusters for automatic failover, cutting downtime by 30%",
+      "Build event-driven services on Kafka, with Debezium capturing change events from PostgreSQL so downstream services stay consistent with the source of record",
+      "Operate a highly available on-premise RabbitMQ cluster carrying live sensor telemetry, with WSO2 Micro Integrator mediating between client systems",
       "Designed REST APIs and a microservices split that improved response times by 40%",
-      "Deployed and operated services on Docker and Docker Swarm, reducing downtime by 30%",
-      "Configured NGINX as reverse proxy and load balancer for request routing",
       "Automated approval workflows with Camunda BPM, cutting manual processing by 50%",
       "Led backend integration of smart asset tracking across GIS and IoT platforms",
     ],
@@ -178,21 +188,20 @@ export const experienceTimeline = [
     period: "Jul 2020 - Jan 2022",
     location: "Egypt",
     highlights: [
-      "Built web-based GIS dashboards in JavaScript, HTML and CSS",
-      "Developed form-driven workflows and notification systems",
-      "Ran satellite image analysis and remote sensing for environmental research",
-      "Delivered client training and product demos on Skyline and ERDAS IMAGINE",
+      "Built and customised Mapp Enterprise dashboards with its JavaScript API",
+      "Developed form-management and notification workflows across systems",
+      "Ran satellite image analysis and remote sensing in ERDAS IMAGINE, including water pollution detection for environmental research",
+      "Delivered pre-sales support and client training on Skyline and ERDAS IMAGINE",
     ],
   },
   {
     role: "Full-Stack Developer",
     company: "Freelance",
-    period: "Ongoing",
+    period: "Jan 2019 - Jun 2020",
     location: "Remote",
     highlights: [
-      "E-commerce application with role-based auth on Next.js and PostgreSQL",
-      "Hospital management system on React, NestJS, PostgreSQL and Redis",
-      "Point-of-sale system on React Electron, NestJS and PostgreSQL",
+      "Delivered React dashboards and full-stack applications for small businesses, automating internal workflows",
+      "Built and deployed REST APIs on NestJS and PostgreSQL, tuned for the scale each client actually had",
     ],
   },
 ];
@@ -223,23 +232,46 @@ export const skillGroups = [
   },
   {
     label: "Front end",
-    items: ["React", "Next.js", "Redux", "Tailwind CSS"],
+    items: ["React", "Next.js", "Redux", "Chakra UI", "Tailwind CSS"],
   },
   {
     label: "Back end",
     items: ["Node.js", "NestJS", "Express", "Spring Boot", "REST", "Microservices"],
   },
   {
+    label: "Events",
+    items: ["Apache Kafka", "RabbitMQ", "Debezium CDC"],
+  },
+  {
     label: "Data",
-    items: ["PostgreSQL", "MySQL", "SQL Server", "Redis", "PostGIS"],
+    items: [
+      "PostgreSQL",
+      "Patroni HA",
+      "PostGIS",
+      "Redis",
+      "Query tuning",
+      "Backup and recovery",
+    ],
   },
   {
     label: "Operations",
-    items: ["Docker", "Docker Swarm", "NGINX", "Linux", "Git", "CI/CD"],
+    items: [
+      "Docker",
+      "Docker Swarm",
+      "NGINX",
+      "RHEL",
+      "Ubuntu",
+      "Azure CLI",
+      "GitHub Actions",
+    ],
   },
   {
-    label: "Automation",
-    items: ["Camunda BPM", "BPMN", "DMN", "CMMN", "n8n"],
+    label: "Integration",
+    items: ["WSO2 Micro Integrator", "Camunda BPM", "BPMN", "DMN", "n8n"],
+  },
+  {
+    label: "Geospatial",
+    items: ["Maps & Apps (MnA)", "PostGIS", "Apache Superset", "ERDAS IMAGINE"],
   },
   {
     label: "AI",
@@ -254,7 +286,7 @@ export const skillGroups = [
 ];
 
 export const facts = [
-  { value: "5+", label: "Years shipping" },
+  { value: "7+", label: "Years shipping" },
   { value: "40%", label: "Faster API responses" },
   { value: "30%", label: "Less downtime" },
   { value: "50%", label: "Less manual processing" },

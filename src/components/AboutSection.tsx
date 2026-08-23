@@ -23,8 +23,8 @@ const AboutSection: React.FC = () => (
       index="03"
       label="About"
       titleId="about-title"
-      title="Five years of building for people who depend on it"
-      lede="I work across the whole stack, but the part I care most about is what happens after launch: whether the thing stays up, stays fast, and stays understandable to whoever inherits it. Most of my work has been public-sector and utility systems where that matters more than the front page."
+      title="Seven years of building for people who depend on it"
+      lede="I work across the whole stack, but the part I care most about is what happens after launch: whether the thing stays up, stays fast, and stays understandable to whoever inherits it. Most of my work has been public-sector and utility systems, where that matters more than the front page, and where I am often the person who gets called when it does not."
     />
 
     {/* Static figures. The previous build animated these counters on every

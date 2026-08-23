@@ -4,9 +4,9 @@ import { PROFILE } from "../constants";
 import resumePdfPath from "../assets/Mohamed_Samy_Resume.pdf";
 
 const facts = [
-  { label: "Currently", value: "Senior Software Engineer, Penta-b" },
+  { label: "Currently", value: "NCEC environmental platform, Penta-b" },
   { label: "Based in", value: PROFILE.location },
-  { label: "Working in", value: "React · NestJS · PostgreSQL · Docker" },
+  { label: "Working in", value: "React · NestJS · Kafka · Docker Swarm · RHEL" },
 ];
 
 /**
@@ -41,10 +41,10 @@ const HeroSection: React.FC = () => {
             <p
               className="mt-7 max-w-[54ch] text-lg leading-relaxed text-ink-muted sm:text-xl"
             >
-              I build web systems and keep them running. Five years of
-              production work across government, utilities and private
-              clients, from the React front end down to the containers and
-              the reverse proxy.
+              I build web systems and keep them running. Seven years of
+              production work for governments and utilities across Saudi
+              Arabia, Oman and Egypt, from the React front end down to the
+              Linux hosts and the database failover.
             </p>
 
             <div

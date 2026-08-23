@@ -17,7 +17,7 @@ const ProjectsSection: React.FC = () => (
       label="Selected work"
       titleId="projects-title"
       title="Systems people depend on"
-      lede="Most of what I have built runs inside governments and utilities: licensing, water and wastewater, asset tracking, public portals. It is client-owned, so none of it is linkable, which is the trade for working on things at that scale."
+      lede="Most of what I have built runs inside governments and utilities: environmental monitoring, licensing, water and wastewater, asset tracking, public portals. It is client-owned, so none of it is linkable, which is the trade for working on things at that scale."
     />
 
     <ol className="mt-14 md:mt-16">
