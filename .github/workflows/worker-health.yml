@@ -1,0 +1,25 @@
+# Canary for the Design Lab Worker.
+#
+# The API has twice been silently replaced by the static site, taking the
+# GEMINI_API_KEY secret with it. The browser reports it as a CORS error, which
+# points nowhere near the cause, so it went unnoticed for days both times.
+#
+# This costs nothing to run: every check is rejected by the Worker before it
+# reaches the model, so no tokens and no rate-limit quota are consumed.
+name: Worker health
+
+on:
+  schedule:
+    - cron: "17 6 * * *" # daily, a little after the hour to avoid the rush
+  workflow_dispatch:
+
+jobs:
+  health:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - name: Check the Design Lab endpoint is an API, not a website
+        run: node scripts/verify_worker.mjs ${{ vars.VITE_DESIGNLAB_ENDPOINT }}

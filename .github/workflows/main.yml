@@ -62,3 +62,10 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+      # A Git-connected Cloudflare build has twice redeployed this site over the
+      # Design Lab API Worker moments after a push. Fail loudly here rather than
+      # discover it later as a CORS error. The site itself is already published
+      # by this point, so a failure here does not affect the deploy.
+      - name: Verify the Design Lab Worker still serves the API
+        if: ${{ vars.VITE_DESIGNLAB_ENDPOINT != '' }}
+        run: node scripts/verify_worker.mjs ${{ vars.VITE_DESIGNLAB_ENDPOINT }}
